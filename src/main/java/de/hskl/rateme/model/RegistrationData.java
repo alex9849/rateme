@@ -1,50 +1,16 @@
 package de.hskl.rateme.model;
 
-import de.hskl.rateme.util.Validator;
 
-import java.sql.Timestamp;
-
-public class User {
-    private int id;
-
-    @Validator.Required
+public class RegistrationData {
     private String username;
-
-    @Validator.Required
-    @Validator.Regex(regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
     private String email;
-
-    @Validator.Required
     private String firstname;
-
-    @Validator.Required
     private String lastname;
-
-    @Validator.Required
     private String street;
-
-    @Validator.Required
     private String streetNr;
-
-    @Validator.Required
     private String zip;
-
-    @Validator.Required
     private String city;
-
-    @Validator.Required
     private String password;
-
-    private Timestamp createDt;
-    private Timestamp modifyDt;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -116,21 +82,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Timestamp getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Timestamp createDt) {
-        this.createDt = createDt;
-    }
-
-    public Timestamp getModifyDt() {
-        return modifyDt;
-    }
-
-    public void setModifyDt(Timestamp modifyDt) {
-        this.modifyDt = modifyDt;
     }
 }

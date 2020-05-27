@@ -44,7 +44,7 @@
             </div>
             <button onclick="hideInfoArea()" style="alignment: right">Schließen</button>
         </div>
-		<h3>Bewertung abgeben:</h3>
+        <h3>Bewertung abgeben:</h3>
         <div id="bewertungsAbgabenDiv">
             <table>
                 <tr>
@@ -76,13 +76,13 @@
             <p/>
             <button type="button">Absenden</button>
         </div>
-		<h3>Bewertungen:</h3>
-			<div id="bewertungsDiv">
-				<p>Noch keine Bewertungen</p>
-			</div>
-		<div>
+        <h3>Bewertungen:</h3>
+        <div id="bewertungsDiv">
+            <p>Noch keine Bewertungen</p>
+        </div>
+        <div>
 
-		</div>
+        </div>
     </aside>
     <footer> Hier stehen später die gemachten Bewertungen</footer>
 </div>
@@ -100,16 +100,16 @@
         </tr>
         <tr>
             <td>Straße</td>
-            <td><input type="text" name="street" size="25"/> <span
+            <td><input type="text" name="street" size="25" required/> <span
                     style="float: right;"> Nr: <input type="text" name="streetNr"
-                                                      size="4"/>
+                                                      size="4" required/>
 			</span></td>
         </tr>
         <tr>
             <td>PLZ</td>
-            <td><input type="text" name="zip" size="5"/> <span
+            <td><input type="text" name="zip" size="5" required/> <span
                     style="float: right;"> Ort <input type="text" name="city"
-                                                      size="25"/>
+                                                      size="25" required/>
 			</span></td>
         </tr>
         <tr>

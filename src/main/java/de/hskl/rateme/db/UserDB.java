@@ -5,6 +5,7 @@ import de.hskl.rateme.model.User;
 
 import java.sql.*;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class UserDB {
 
@@ -20,7 +21,7 @@ public class UserDB {
             pstmt.setString(6, user.getStreetNr());
             pstmt.setString(7, user.getZip());
             pstmt.setString(8, user.getCity());
-            pstmt.setBytes(9, user.getPassword());
+            pstmt.setString(9, user.getPassword());
             pstmt.execute();
             ResultSet genKeys = pstmt.getGeneratedKeys();
             while (genKeys.next()) {
@@ -66,14 +67,6 @@ public class UserDB {
         }
     }
 
-    public boolean validatePassword(String username, String password) {
-        User user = loadUser(username);
-        if(user == null) {
-            return false;
-        }
-        return Arrays.equals(user.getPassword(), password.getBytes());
-    }
-
     private User parseRs(ResultSet rs) throws SQLException {
         User user = new User();
         user.setId(rs.getInt("user_id"));
@@ -85,7 +78,7 @@ public class UserDB {
         user.setStreetNr(rs.getString("streetNr"));
         user.setZip(rs.getString("zip"));
         user.setCity(rs.getString("city"));
-        user.setPassword(rs.getBytes("password"));
+        user.setPassword(rs.getString("password"));
         user.setCreateDt(rs.getTimestamp("create_dt"));
         user.setModifyDt(rs.getTimestamp("modify_dt"));
         return user;
