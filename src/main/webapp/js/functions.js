@@ -79,7 +79,7 @@ function setPubHeadline(poi) {
 	let infolink = document.createElement("a");
 	infolink.innerText = "Infos";
 	let linkAtt = document.createAttribute("href");
-	linkAtt.value = "javascript:showTags()";
+	linkAtt.value = "javascript:switchInfoArea()";
 	infolink.setAttributeNode(linkAtt);
 	document.querySelector("#pubheadline").innerHTML = getName(poi) + " (" + infolink.outerHTML + ")";
 }
@@ -99,7 +99,49 @@ function generateTagTable(tags) {
 	return tagtable;
 }
 
-function showTags() {
+function checkPassword() {
+	let registerPassword = document.querySelector("#registerPassword").value;
+	let length = registerPassword.length;
+	let regexSecialSign = /[!ยง$&?]/;
+	let regexNumbers = /[1234567890]/;
+	let regexMinorChars = /[abcdefghijklmnopqrstuvwxyz]/;
+	let regexMajorChars = /[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/;
+
+	let security = 0;
+	if(length >= 5) {
+		security = 1;
+		if(regexMinorChars.test(registerPassword) && regexMajorChars.test(registerPassword)) {
+			security = 2;
+			if(regexSecialSign.test(registerPassword) && regexNumbers.test(registerPassword)) {
+				security = 3;
+				if(length > 7) {
+					security = 4;
+				}
+			}
+		}
+	}
+
+	var c = document.querySelector("#pwdCanvas");
+	var ctx = c.getContext("2d");
+	ctx.fillStyle = "red";
+	ctx.fillRect(0, 0, 265, 10);
+	var grd = ctx.createLinearGradient(0, 0, security * 100, 0);
+	grd.addColorStop(0, "green");
+	grd.addColorStop(1, "red");
+	ctx.fillStyle = grd;
+	ctx.fillRect(0, 0, 265, 10);
+
+}
+
+function switchInfoArea() {
+	if(document.querySelector("#infoareawbutton").style.display === "block") {
+		hideInfoArea();
+	} else {
+		showInfoArea();
+	}
+}
+
+function showInfoArea() {
 	document.querySelector("#infoareawbutton").style.display = "block";
 }
 
@@ -116,6 +158,13 @@ function getName(poi) {
 	return 'Unbenannt';
 }
 
+function switchRegistration() {
+	if(document.querySelector("#registration").style.display === "block") {
+		hideRegistration();
+	} else {
+		showRegistration();
+	}
+}
 
 function showRegistration() {
 	document.querySelector("#registration").style.display = "block";

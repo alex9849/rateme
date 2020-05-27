@@ -32,7 +32,6 @@ footer { display: none; }
     background-color: #F9EECF;
 }
 
-
 header {
 	padding: 15px;
 	border-bottom: 1px solid #fff;
@@ -53,6 +52,7 @@ aside {
 	border-bottom: 2px solid #fff;
     background:#F3E2A9;
     grid-area: rating;
+    overflow: auto;
 }
 
 footer {
@@ -62,11 +62,17 @@ footer {
     grid-area: userRating;
 }
 
-#bewertungsDiv {
+#bewertungsAbgabenDiv {
 	width: 300px; 
 	background: #F9EECF; 
 	border: 1px dotted black; 
 	text-align: left
+}
+
+#bewertungsDiv {
+    width: 300px;
+    background: #F9EECF;
+    text-align: left
 }
 
 
