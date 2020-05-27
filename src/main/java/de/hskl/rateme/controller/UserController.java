@@ -1,6 +1,7 @@
 package de.hskl.rateme.controller;
 
 import de.hskl.rateme.db.UserDB;
+import de.hskl.rateme.model.LoginData;
 import de.hskl.rateme.model.RatemeDbException;
 import de.hskl.rateme.model.RegistrationData;
 import de.hskl.rateme.model.User;
@@ -31,8 +32,26 @@ public class UserController {
         user.setModifyDt(null);
         user.setCreateDt(null);
         Validator.validate(user);
+        if(userDB.loadUser(user.getUsername()) != null) {
+            throw new RatemeDbException("A user with this username already exists!");
+        }
         user.setPassword(Password.getSaltedHash(user.getPassword()));
         userDB.createUser(user);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loginUser(@RequestBody(required = true) LoginData loginData) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        Validator.validate(loginData);
+        User user = userDB.loadUser(loginData.getUsername());
+        if(user == null) {
+            throw new RatemeDbException("User does not exist!");
+        }
+        if(!Password.checkPassword(loginData.getPassword(), user.getPassword())) {
+            throw new RatemeDbException("Password invalid!");
+        }
         return Response.ok().build();
     }
 
