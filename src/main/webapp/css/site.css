@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+footer { display: none; }
+
+.mainContainer { 
+  height:100vh; 
+  display: grid; 
+  grid-template-rows: auto 4fr 2fr; 
+  grid-template-columns: 100%; 
+  grid-template-areas:  
+    "login" 
+    "map" 
+    "rating" 
+  ; 
+} 
+
+@media screen and (min-width: 44.001em) { 
+  footer { display: block; }
+  .mainContainer { 
+    grid-template-rows: 50px 600px auto;
+    /*grid-template-columns: 80% 20%; */
+    grid-template-columns: auto minmax(350px, 350px);
+    grid-template-areas:  
+      "login      login" 
+      "map        rating" 
+      "userRating userRating " 
+    ; 
+  }
+}
+
+#infoarea {
+    background-color: #F9EECF;
+}
+
+
+header {
+	padding: 15px;
+	border-bottom: 1px solid #fff;
+	background-color: #D8D8D8;
+    grid-area: login;
+}
+
+
+article {
+	border-bottom: 2px solid #fff;
+    background: white;
+    grid-area: map;
+}
+
+
+aside {
+    padding: 10px;
+	border-bottom: 2px solid #fff;
+    background:#F3E2A9;
+    grid-area: rating;
+}
+
+footer {
+	padding: 15px;
+	border-bottom: 2px solid #fff;
+    background: #D8D8D8;
+    grid-area: userRating;
+}
+
+#bewertungsDiv {
+	width: 300px; 
+	background: #F9EECF; 
+	border: 1px dotted black; 
+	text-align: left
+}
+
+
+#registration {
+	position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 400px;
+    padding: 15px;
+    border: 3px solid #2c3d03;
+    background: #ffe6b3;
+    z-index: 1000;    
+}
+
+
+
