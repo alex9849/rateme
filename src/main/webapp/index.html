@@ -21,19 +21,22 @@
 <div class="mainContainer">
     <header>
         <div id="loginAndRegister">
-				<span style="white-space: nowrap"> Benutzer: <input
-                        id="loginUserName" type="text" name="userName" required/>
-				</span> <span style="white-space: nowrap"> Password: <input
-                id="loginPassword" type="password" name="password" required/>
+            <form id="loginForm">
+                <span style="white-space: nowrap"> Benutzer:
+                    <input type="text" name="username" required/>
+				</span> <span style="white-space: nowrap"> Password:
+                    <input type="password" name="password" required/>
 				</span>
-            <button type="button" style="width: 100px;" onclick="loginUser()">Anmelden</button>
-            <span id="loginErrorArea" style="white-space: nowrap; color: red"></span>
-            <span style="float: right; white-space: nowrap"> <a href="javascript:switchRegistration()">
-						Als neuer Benutzer registrieren</a></span>
+                <button type="submit" style="width: 100px;">Anmelden</button>
+                <span id="loginErrorArea" style="white-space: nowrap; color: red"></span>
+                <span style="float: right; white-space: nowrap">
+                    <a id="showRegisterLink" href="#">Als neuer Benutzer registrieren</a>
+                </span>
+            </form>
         </div>
         <div id="currentUserInfo" style="display: none">
             <span id="currentUserInfoHello" style="white-space: nowrap"></span>
-            <button type="button" style="width: 100px;" onclick="logoutUser()">Logout</button>
+            <button id="logoutButton" type="button" style="width: 100px;">Logout</button>
             <span id="logoutErrorArea" style="white-space: nowrap"></span>
         </div>
     </header>
@@ -59,7 +62,8 @@
                         <td>
                             <fieldset class="rating">
                                 <legend></legend>
-                                <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Rocks!">5
+                                <input type="radio" id="star5" name="rating" value="5"/><label for="star5"
+                                                                                               title="Rocks!">5
                                 stars</label>
                                 <input type="radio" id="star4" name="rating" value="4"/><label for="star4"
                                                                                                title="Pretty good">4
@@ -97,60 +101,61 @@
 </body>
 
 <div id="registration" style="display : none">
-    <table>
-        <tr>
-            <td>Vorname</td>
-            <td><input type="text" name="firstname" size="40" required/></td>
-        </tr>
-        <tr>
-            <td>Nachname</td>
-            <td><input type="text" name="lastname" size="40" required/></td>
-        </tr>
-        <tr>
-            <td>Straße</td>
-            <td><input type="text" name="street" size="25" required/> <span
-                    style="float: right;"> Nr: <input type="text" name="streetNr"
-                                                      size="4" required/>
+    <form id="registrationForm">
+        <table>
+            <tr>
+                <td>Vorname</td>
+                <td><input type="text" name="firstname" size="40" required/></td>
+            </tr>
+            <tr>
+                <td>Nachname</td>
+                <td><input type="text" name="lastname" size="40" required/></td>
+            </tr>
+            <tr>
+                <td>Straße</td>
+                <td><input type="text" name="street" size="25" required/> <span
+                        style="float: right;"> Nr: <input type="text" name="streetNr"
+                                                          size="4" required/>
 			</span></td>
-        </tr>
-        <tr>
-            <td>PLZ</td>
-            <td><input type="text" name="zip" size="5" required/> <span
-                    style="float: right;"> Ort <input type="text" name="city"
-                                                      size="25" required/>
+            </tr>
+            <tr>
+                <td>PLZ</td>
+                <td><input type="text" name="zip" size="5" required/> <span
+                        style="float: right;"> Ort <input type="text" name="city"
+                                                          size="25" required/>
 			</span></td>
-        </tr>
-        <tr>
-            <td>E-Mail</td>
-            <td><input type="email" name="email" size="40" required/></td>
-        </tr>
-        <tr>
-            <td>Benutzer-ID</td>
-            <td><input type="text" name="username" size="40" required/></td>
-        </tr>
-        <tr>
-            <td>Passwort</td>
-            <td><input id="registerPassword" type="password" name="password" size="40" required
-                       onkeyup="updatePasswordCanvas()"/></td>
-        </tr>
-        <tr>
-            <td>Passwortsicherheit</td>
-            <td>
-                <canvas id="pwdCanvas" height="10" width="265"
-                        style="border: 1px solid #d3d3d3; float: right;"></canvas>
-            </td>
-        </tr>
+            </tr>
+            <tr>
+                <td>E-Mail</td>
+                <td><input type="email" name="email" size="40" required/></td>
+            </tr>
+            <tr>
+                <td>Benutzer-ID</td>
+                <td><input type="text" name="username" size="40" required/></td>
+            </tr>
+            <tr>
+                <td>Passwort</td>
+                <td><input id="registerPassword" type="password" name="password" size="40" required/></td>
+            </tr>
+            <tr>
+                <td>Passwortsicherheit</td>
+                <td>
+                    <canvas id="pwdCanvas" height="10" width="265"
+                            style="border: 1px solid #d3d3d3; float: right;"></canvas>
+                </td>
+            </tr>
 
-        <tr>
-            <td>&nbsp;</td>
-            <td align="center">
-                <button type="register" style="width: 100px; height: 30px;">Registrieren</button>
-                <button type="abortregister" style="width: 100px; height: 30px;" onclick="hideRegistration()">
-                    Abbrechen
-                </button>
-            </td>
-        </tr>
-    </table>
+            <tr>
+                <td>&nbsp;</td>
+                <td align="center">
+                    <button type="submit" style="width: 100px; height: 30px;">Registrieren</button>
+                    <button id="registerAbort" style="width: 100px; height: 30px;">
+                        Abbrechen
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 
 </html>

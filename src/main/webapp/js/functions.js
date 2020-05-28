@@ -5,6 +5,7 @@ let selectedMarker;
 let currentUser;
 
 window.onload = function() {
+	setupButtons();
 	mymap = L.map('mapid').setView([ 49.250723, 7.377122 ], 13);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?'
@@ -40,6 +41,15 @@ window.onload = function() {
 	showPoisOnMap();
 };
 
+function setupButtons() {
+	document.querySelector("#loginForm").addEventListener("submit", e => {loginUser(e.target.elements.username.value, e.target.elements.password.value); e.preventDefault();});
+	document.querySelector("#showRegisterLink").addEventListener("click", e => switchRegistration());
+	document.querySelector("#registerAbort").addEventListener("click", e => hideRegistration());
+	document.querySelector("#logoutButton").addEventListener("click", e => logoutUser());
+	document.querySelector("#registerPassword").addEventListener("onkeyup", e => updatePasswordCanvas());
+	document.querySelector("#registrationForm").addEventListener("submit", e => {submitRegister(e); e.preventDefault();});
+}
+
 function showPoisOnMap() {
 	fetch("rateme/poi")
 		.then(response => response.json())
@@ -51,10 +61,10 @@ function showPoisOnMap() {
 		})).catch(err => console.log(err));
 }
 
-function loginUser() {
+function loginUser(username, password) {
 	let data = {
-		username: document.querySelector("#loginUserName").value,
-		password: document.querySelector("#loginPassword").value
+		username: username,
+		password: password
 	};
 	let cfg = {
 		method: 'POST',
@@ -87,6 +97,32 @@ function logoutUser() {
 		.catch(err => {
 			document.querySelector("#logoutErrorArea").innerHTML = "Logout failed!";
 		})
+}
+
+function submitRegister(e) {
+	let username = e.target.elements.username.value;
+	let password = e.target.elements.password.value;
+	let data = {
+		firstname: e.target.elements.firstname.value,
+		lastname: e.target.elements.lastname.value,
+		street: e.target.elements.street.value,
+		streetNr: e.target.elements.streetNr.value,
+		zip: e.target.elements.zip.value,
+		city: e.target.elements.city.value,
+		email: e.target.elements.email.value,
+		username: username,
+		password: password
+	};
+	let cfg = {
+		method: 'PUT',
+		headers: { 'Content-type': 'application/json' },
+		body: JSON.stringify(data)
+	};
+	fetch("rateme/user", cfg)
+		.then(response => {
+			loginUser(username, password);
+			hideRegistration();
+		});
 }
 
 function poiSelectionCallback(poi) {
