@@ -1,7 +1,8 @@
-package de.hskl.rateme.controller;
+package de.hskl.rateme.endpoint;
 
 import de.hskl.rateme.db.PoiTagDB;
 import de.hskl.rateme.model.PoiTag;
+import de.hskl.rateme.service.PoiService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,16 +16,16 @@ import java.util.Collection;
 
 @Path("/poitag")
 @Singleton
-public class PoiTagController {
+public class PoiTagEndpoint {
     @Inject
-    private PoiTagDB poiTagDB;
+    private PoiService poiService;
 
     @GET
     @Path("{poiid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPoiTags(@PathParam("poiid") long poiId) {
         System.out.println("getAllPoiTags");
-        Collection<PoiTag> allPoi = poiTagDB.loadTagsForPoi(poiId);
+        Collection<PoiTag> allPoi = poiService.getPoiTags(poiId);
         return Response.ok().entity(allPoi).build();
     }
 }

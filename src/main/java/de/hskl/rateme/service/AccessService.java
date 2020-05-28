@@ -1,13 +1,12 @@
-package de.hskl.rateme.controller;
+package de.hskl.rateme.service;
 
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Singleton
-public class AccessController {
+public class AccessService {
     private Map<UUID, Integer> logins = new HashMap<>();
 
     public boolean isLoggedIn(UUID loginId) {
@@ -30,8 +29,8 @@ public class AccessController {
         return uuid;
     }
 
-    public void logout(UUID loginId) {
-        this.logins.remove(loginId);
+    public boolean logout(UUID loginId) {
+        return this.logins.remove(loginId) != null;
     }
 
 

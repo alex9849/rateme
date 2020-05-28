@@ -1,7 +1,8 @@
-package de.hskl.rateme.controller;
+package de.hskl.rateme.endpoint;
 
 import de.hskl.rateme.db.PoiDB;
 import de.hskl.rateme.model.Poi;
+import de.hskl.rateme.service.PoiService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,15 +15,15 @@ import java.util.Collection;
 
 @Path("/poi")
 @Singleton
-public class PoiController {
+public class PoiEndpoint {
     @Inject
-    private PoiDB poiDB;
+    private PoiService poiService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPoi() {
         System.out.println("getAllPoi");
-        Collection<Poi> allPoi = poiDB.loadPois();
+        Collection<Poi> allPoi = poiService.getAllPoi();
         return Response.ok().entity(allPoi).build();
     }
 }
