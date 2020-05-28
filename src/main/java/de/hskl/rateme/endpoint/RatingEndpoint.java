@@ -1,6 +1,5 @@
 package de.hskl.rateme.endpoint;
 
-import de.hskl.rateme.model.RatemeDbException;
 import de.hskl.rateme.model.Rating;
 import de.hskl.rateme.service.AccessService;
 import de.hskl.rateme.service.RatingService;
@@ -34,11 +33,11 @@ public class RatingEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString, @PathParam("userid") int poiId) {
         if(loginIdString == null) {
-            throw new RatemeDbException("Not logged in!");
+            return Response.status(401).build();
         }
         UUID loginId = UUID.fromString(loginIdString);
         if(!accessService.isLoggedIn(loginId)) {
-            throw new RatemeDbException("Not logged in!");
+            return Response.status(401).build();
         }
         return Response.ok().entity(ratingService.getRatingsByUser(poiId)).build();
     }
@@ -48,11 +47,11 @@ public class RatingEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response rate(@CookieParam("LoginID") String loginIdString, @RequestBody Rating rating) {
         if(loginIdString == null) {
-            throw new RatemeDbException("Not logged in!");
+            return Response.status(401).build();
         }
         UUID loginId = UUID.fromString(loginIdString);
         if(!accessService.isLoggedIn(loginId)) {
-            throw new RatemeDbException("Not logged in!");
+            return Response.status(401).build();
         }
         int userId = accessService.getUserId(loginId);
         rating.setCreateDt(null);

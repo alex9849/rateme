@@ -20,7 +20,7 @@ public class RatingService {
             throw new RatemeDbException("Poi doesn't exist!");
         }
         if(ratingDB.loadRatingsForPoi(rating.getOsmId()).stream().anyMatch(x -> x.getOsmId() == rating.getOsmId())) {
-            throw new RatemeDbException("You can rate an poi only once!");
+            throw new RatemeDbException("You can rate the same poi only once!");
         }
         ratingDB.createRating(rating);
     }

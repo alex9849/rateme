@@ -8,8 +8,6 @@ import de.hskl.rateme.util.Password;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.UUID;
 
 @Singleton
@@ -19,7 +17,7 @@ public class UserService {
     @Inject
     AccessService accessService;
 
-    public User createUser(User user) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public User createUser(User user) {
         if(userDB.loadUser(user.getUsername()) != null) {
             throw new RatemeDbException("A user with this username already exists!");
         }
@@ -32,7 +30,7 @@ public class UserService {
         return userDB.loadUser(id);
     }
 
-    public UUID loginUser(LoginData loginData) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public UUID loginUser(LoginData loginData) {
         User user = userDB.loadUser(loginData.getUsername());
         if(user == null) {
             throw new RatemeDbException("User does not exist!");
