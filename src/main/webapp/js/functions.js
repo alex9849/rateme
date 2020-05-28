@@ -2,6 +2,7 @@ let mymap;
 let redIcon;
 let blueIcon;
 let selectedMarker;
+let currentUser;
 
 window.onload = function() {
 	mymap = L.map('mapid').setView([ 49.250723, 7.377122 ], 13);
@@ -50,6 +51,44 @@ function showPoisOnMap() {
 		})).catch(err => console.log(err));
 }
 
+function loginUser() {
+	let data = {
+		username: document.querySelector("#loginUserName").value,
+		password: document.querySelector("#loginPassword").value
+	};
+	let cfg = {
+		method: 'POST',
+		headers: { 'Content-type': 'application/json' },
+		body: JSON.stringify(data)
+	};
+	fetch("rateme/user", cfg)
+		.then(response => response.json())
+		.then(data => {
+			currentUser = data;
+			updateRatingSubmitDiv();
+			updateHeader();
+		})
+		.catch(err => {
+			document.querySelector("#loginErrorArea").innerHTML = "Login failed!";
+		})
+}
+
+function logoutUser() {
+	let cfg = {
+		method: 'DELETE',
+		headers: { 'Content-type': 'application/json' }
+	};
+	fetch("rateme/user", cfg)
+		.then(data => {
+			currentUser = null;
+			updateRatingSubmitDiv();
+			updateHeader();
+		})
+		.catch(err => {
+			document.querySelector("#logoutErrorArea").innerHTML = "Logout failed!";
+		})
+}
+
 function poiSelectionCallback(poi) {
 	return function (event) {
 		if(selectedMarker != null) {
@@ -66,22 +105,26 @@ function poiSelectionCallback(poi) {
 			console.log(item.tag + " " + item.value);
 		});
 
-		setPubHeadline(poi);
+		updatePubHeadline(poi);
 
 		let infoArea = document.querySelector("#infoarea");
 		infoArea.innerHTML = '';
 		infoArea.appendChild(generateTagTable(poi.poiTags));
-
+		updateRatingSubmitDiv();
 	}
 }
 
-function setPubHeadline(poi) {
-	let infolink = document.createElement("a");
-	infolink.innerText = "Infos";
-	let linkAtt = document.createAttribute("href");
-	linkAtt.value = "javascript:switchInfoArea()";
-	infolink.setAttributeNode(linkAtt);
-	document.querySelector("#pubheadline").innerHTML = getName(poi) + " (" + infolink.outerHTML + ")";
+/* #########################
+### Generators / Getters ###
+######################### */
+
+function getName(poi) {
+	for(let tag of poi.poiTags) {
+		if(tag.tag === "name") {
+			return tag.value;
+		}
+	}
+	return 'Unbenannt';
 }
 
 function generateTagTable(tags) {
@@ -99,7 +142,41 @@ function generateTagTable(tags) {
 	return tagtable;
 }
 
-function checkPassword() {
+/* #########################
+######### Updaters #########
+######################### */
+
+function updatePubHeadline(poi) {
+	let infolink = document.createElement("a");
+	infolink.innerText = "Infos";
+	let linkAtt = document.createAttribute("href");
+	linkAtt.value = "javascript:switchInfoArea()";
+	infolink.setAttributeNode(linkAtt);
+	document.querySelector("#pubheadline").innerHTML = getName(poi) + " (" + infolink.outerHTML + ")";
+}
+
+function updateHeader() {
+	if(currentUser != null) {
+		document.querySelector("#loginAndRegister").style.display = "none";
+		document.querySelector("#currentUserInfo").style.display = "block";
+		document.querySelector("#currentUserInfoHello").innerHTML = "Hallo " + currentUser.username + "!";
+		document.querySelector("#loginErrorArea").innerHTML = "";
+	} else {
+		document.querySelector("#loginAndRegister").style.display = "block";
+		document.querySelector("#currentUserInfo").style.display = "none";
+		document.querySelector("#logoutErrorArea").innerHTML = "";
+	}
+}
+
+function updateRatingSubmitDiv() {
+	if(currentUser != null && selectedMarker != null) {
+		document.querySelector("#bewertungsAbgabenDiv").style.display = "block";
+	} else {
+		document.querySelector("#bewertungsAbgabenDiv").style.display = "none";
+	}
+}
+
+function updatePasswordCanvas() {
 	let registerPassword = document.querySelector("#registerPassword").value;
 	let length = registerPassword.length;
 	let regexSecialSign = /[!ยง$&?]/;
@@ -130,7 +207,6 @@ function checkPassword() {
 	grd.addColorStop(1, "red");
 	ctx.fillStyle = grd;
 	ctx.fillRect(0, 0, 265, 10);
-
 }
 
 function switchInfoArea() {
@@ -147,15 +223,6 @@ function showInfoArea() {
 
 function hideInfoArea() {
 	document.querySelector("#infoareawbutton").style.display = "none";
-}
-
-function getName(poi) {
-	for(let tag of poi.poiTags) {
-		if(tag.tag === "name") {
-			return tag.value;
-		}
-	}
-	return 'Unbenannt';
 }
 
 function switchRegistration() {

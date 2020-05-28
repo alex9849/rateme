@@ -20,15 +20,21 @@
 <body>
 <div class="mainContainer">
     <header>
-        <div>
+        <div id="loginAndRegister">
 				<span style="white-space: nowrap"> Benutzer: <input
-                        id="userNameLogin" type="text" name="userName" required/>
+                        id="loginUserName" type="text" name="userName" required/>
 				</span> <span style="white-space: nowrap"> Password: <input
-                id="passwordLogin" type="password" name="password" required/>
+                id="loginPassword" type="password" name="password" required/>
 				</span>
-            <button type="button" style="width: 100px;">Anmelden</button>
+            <button type="button" style="width: 100px;" onclick="loginUser()">Anmelden</button>
+            <span id="loginErrorArea" style="white-space: nowrap; color: red"></span>
             <span style="float: right; white-space: nowrap"> <a href="javascript:switchRegistration()">
 						Als neuer Benutzer registrieren</a></span>
+        </div>
+        <div id="currentUserInfo" style="display: none">
+            <span id="currentUserInfoHello" style="white-space: nowrap"></span>
+            <button type="button" style="width: 100px;" onclick="logoutUser()">Logout</button>
+            <span id="logoutErrorArea" style="white-space: nowrap"></span>
         </div>
     </header>
     <article>
@@ -44,37 +50,39 @@
             </div>
             <button onclick="hideInfoArea()" style="alignment: right">Schließen</button>
         </div>
-        <h3>Bewertung abgeben:</h3>
-        <div id="bewertungsAbgabenDiv">
-            <table>
-                <tr>
-                    <td>Bewertung:
-                    <td>
-                        <fieldset class="rating">
-                            <legend></legend>
-                            <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Rocks!">5
-                            stars</label>
-                            <input type="radio" id="star4" name="rating" value="4"/><label for="star4"
-                                                                                           title="Pretty good">4
-                            stars</label>
-                            <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Meh">3
-                            stars</label>
-                            <input type="radio" id="star2" name="rating" value="2"/><label for="star2"
-                                                                                           title="Kinda bad">2
-                            stars</label>
-                            <input type="radio" id="star1" name="rating" value="1"/><label for="star1"
-                                                                                           title="Sucks big time">1
-                            star</label>
-                        </fieldset>
-                    </td>
-                </tr>
-            </table>
-            Kommentar:
-            <textarea id="ratingText" name="ratingTxt" style="width: 280px;"> </textarea>
-            <p/>
-            Bild hochladen: <br/> <input id="file" type="file" name="file"/>
-            <p/>
-            <button type="button">Absenden</button>
+        <div id="bewertungsAbgabenDiv" style="display: none">
+            <h3>Bewertung abgeben:</h3>
+            <div class="bright dotted">
+                <table>
+                    <tr>
+                        <td>Bewertung:
+                        <td>
+                            <fieldset class="rating">
+                                <legend></legend>
+                                <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Rocks!">5
+                                stars</label>
+                                <input type="radio" id="star4" name="rating" value="4"/><label for="star4"
+                                                                                               title="Pretty good">4
+                                stars</label>
+                                <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Meh">3
+                                stars</label>
+                                <input type="radio" id="star2" name="rating" value="2"/><label for="star2"
+                                                                                               title="Kinda bad">2
+                                stars</label>
+                                <input type="radio" id="star1" name="rating" value="1"/><label for="star1"
+                                                                                               title="Sucks big time">1
+                                star</label>
+                            </fieldset>
+                        </td>
+                    </tr>
+                </table>
+                Kommentar:
+                <textarea id="ratingText" name="ratingTxt" style="width: 280px;"> </textarea>
+                <p/>
+                Bild hochladen: <br/> <input id="file" type="file" name="file"/>
+                <p/>
+                <button type="button">Absenden</button>
+            </div>
         </div>
         <h3>Bewertungen:</h3>
         <div id="bewertungsDiv">
@@ -123,7 +131,7 @@
         <tr>
             <td>Passwort</td>
             <td><input id="registerPassword" type="password" name="password" size="40" required
-                       onkeyup="checkPassword()"/></td>
+                       onkeyup="updatePasswordCanvas()"/></td>
         </tr>
         <tr>
             <td>Passwortsicherheit</td>

@@ -63,10 +63,16 @@ footer {
 }
 
 #bewertungsAbgabenDiv {
-	width: 300px; 
-	background: #F9EECF; 
-	border: 1px dotted black; 
+	width: 300px;
 	text-align: left
+}
+
+.bright {
+    background: #F9EECF;
+}
+
+.dotted {
+    border: 1px dotted black;
 }
 
 #bewertungsDiv {
