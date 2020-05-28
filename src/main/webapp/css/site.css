@@ -81,7 +81,8 @@ footer {
 #bewertungsDiv {
     width: 300px;
     background: #F9EECF;
-    text-align: left
+    text-align: left;
+    padding: 10px;
 }
 
 

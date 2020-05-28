@@ -168,16 +168,9 @@ function poiSelectionCallback(poi) {
 		selectedMarker = event.target;
 		selectedMarker.setIcon(redIcon);
 
-		console.log("Event");
-		console.log(event);
-		console.log("Poi");
-		console.log(poi);
-		poi.poiTags.forEach(item => {
-			console.log(item.tag + " " + item.value);
-		});
-
 		updatePubHeadline(poi);
-
+		updatePoiRatings(poi);
+		hideInfoArea();
 		let infoArea = document.querySelector("#infoarea");
 		infoArea.innerHTML = '';
 		infoArea.appendChild(generateTagTable(poi.poiTags));
@@ -272,6 +265,38 @@ function updateOwnRatings() {
 	} else {
 		ownRatingsArea.appendChild(table);
 	}
+}
+
+function updatePoiRatings(poi) {
+	let bewertungsDiv = document.querySelector("#bewertungsDiv");
+	let config = {
+		method: 'GET',
+		headers: { 'Content-type': 'application/json' }
+	};
+	fetch("/rateme/rating/poi/" + poi.osmId, config)
+		.then(response => response.json())
+		.then(json => {
+			bewertungsDiv.innerHTML = "";
+			let empty = true;
+			for(rating of json) {
+				empty = false;
+				let stars = generateStars(rating.grade);
+				bewertungsDiv.appendChild(stars);
+				let divText = document.createElement("div");
+				let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
+				divText.innerText = "nutzer schreibt am " + createDate.toLocaleDateString("de-DE") + ":";
+				bewertungsDiv.appendChild(divText);
+				let text = document.createElement("div");
+				text.innerText = rating.text;
+				bewertungsDiv.appendChild(text);
+				let br = document.createElement("br");
+				bewertungsDiv.appendChild(br);
+			}
+			if(empty) {
+				bewertungsDiv.innerHTML = "Noch keine Bewertungen!"
+			}
+		})
+
 }
 
 function updatePubHeadline(poi) {
