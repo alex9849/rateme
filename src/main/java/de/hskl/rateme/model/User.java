@@ -2,6 +2,7 @@ package de.hskl.rateme.model;
 
 import de.hskl.rateme.util.Validator;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class User {
@@ -35,8 +36,8 @@ public class User {
     @Validator.Required
     private String password;
 
-    private Timestamp createDt;
-    private Timestamp modifyDt;
+    private Date createDt;
+    private Date modifyDt;
 
     public int getId() {
         return id;
@@ -118,19 +119,19 @@ public class User {
         this.password = password;
     }
 
-    public Timestamp getCreateDt() {
+    public Date getCreateDt() {
         return createDt;
     }
 
-    public void setCreateDt(Timestamp createDt) {
+    public void setCreateDt(Date createDt) {
         this.createDt = createDt;
     }
 
-    public Timestamp getModifyDt() {
+    public Date getModifyDt() {
         return modifyDt;
     }
 
-    public void setModifyDt(Timestamp modifyDt) {
+    public void setModifyDt(Date modifyDt) {
         this.modifyDt = modifyDt;
     }
 }

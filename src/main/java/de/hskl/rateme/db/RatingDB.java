@@ -93,8 +93,8 @@ public class RatingDB {
         rating.setGrade(rs.getInt("grade"));
         rating.setText(rs.getString("txt"));
         rating.setImagePath(rs.getString("image_path"));
-        rating.setCreateDt(rs.getTimestamp("create_dt"));
-        rating.setModifyDt(rs.getTimestamp("modify_dt"));
+        rating.setCreateDt(rs.getDate("create_dt"));
+        rating.setModifyDt(rs.getDate("modify_dt"));
         return rating;
     }
 

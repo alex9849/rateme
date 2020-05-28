@@ -210,22 +210,15 @@ function generateTagTable(tags) {
 }
 
 function generateStars(number) {
-	let fieldset = document.createElement("FIELDSET");
-	fieldset.setAttributeNode(document.createAttribute("disabed"));
-	fieldset.className = "rating";
+	let div = document.createElement("div");
 	for(let i = 1; i <= 5; i++) {
-		let label = document.createElement("label");
-		let star = document.createElement("INPUT");
-		star.setAttribute("type", "radio");
-		star.setAttribute("name", "rating");
-		star.setAttribute("value", i);
-		if(i === number) {
-			star.setAttributeNode(document.createAttribute("checked"))
+		if(i <= number) {
+			div.innerHTML += "<img src=\"./icon/star.png\" />";
+		} else {
+			div.innerHTML += "<img src=\"./icon/star-outline.png\" />";
 		}
-		fieldset.appendChild(star);
-		fieldset.appendChild(label);
 	}
-	return fieldset;
+	return div;
 }
 
 /* #########################
@@ -243,8 +236,8 @@ function updateOwnRatings() {
 		empty = false;
 		let row = document.createElement("TR");
 		let col1 = document.createElement("TD");
-		let createDate = new Date(rating.createDt);
-		col1.innerText = rating.createDt;//createDate.toLocaleDateString("de-DE") + " " + createDate.toLocaleDateString("de-DE");
+		let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
+		col1.innerText = createDate.toLocaleDateString("de-DE");
 		let col2 = document.createElement("TD");
 		let col3 = document.createElement("TD");
 		col3.innerText = rating.text;

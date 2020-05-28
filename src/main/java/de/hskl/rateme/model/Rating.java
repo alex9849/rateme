@@ -2,7 +2,7 @@ package de.hskl.rateme.model;
 
 import de.hskl.rateme.util.Validator;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 public class Rating {
     private int id;
@@ -15,8 +15,8 @@ public class Rating {
     @Validator.Required
     private String text;
     private String imagePath;
-    private Timestamp createDt;
-    private Timestamp modifyDt;
+    private Date createDt;
+    private Date modifyDt;
 
     public int getId() {
         return id;
@@ -74,19 +74,19 @@ public class Rating {
         this.imagePath = imagePath;
     }
 
-    public Timestamp getCreateDt() {
+    public Date getCreateDt() {
         return createDt;
     }
 
-    public void setCreateDt(Timestamp createDt) {
+    public void setCreateDt(Date createDt) {
         this.createDt = createDt;
     }
 
-    public Timestamp getModifyDt() {
+    public Date getModifyDt() {
         return modifyDt;
     }
 
-    public void setModifyDt(Timestamp modifyDt) {
+    public void setModifyDt(Date modifyDt) {
         this.modifyDt = modifyDt;
     }
 }

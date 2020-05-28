@@ -79,8 +79,8 @@ public class UserDB {
         user.setZip(rs.getString("zip"));
         user.setCity(rs.getString("city"));
         user.setPassword(rs.getString("password"));
-        user.setCreateDt(rs.getTimestamp("create_dt"));
-        user.setModifyDt(rs.getTimestamp("modify_dt"));
+        user.setCreateDt(rs.getDate("create_dt"));
+        user.setModifyDt(rs.getDate("modify_dt"));
         return user;
     }
 
