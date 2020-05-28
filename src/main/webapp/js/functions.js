@@ -4,6 +4,7 @@ let blueIcon;
 let selectedMarker;
 let currentUser = null;
 let ownRatings = [];
+let pois = [];
 
 window.onload = function() {
 	setupButtons();
@@ -55,12 +56,15 @@ function setupButtons() {
 function showPoisOnMap() {
 	fetch("rateme/poi")
 		.then(response => response.json())
-		.then(data => data.forEach(poi => {
-			let callback = poiSelectionCallback(poi);
-			L.marker([poi.positionX, poi.positionY], {icon: blueIcon})
-				.addTo(mymap)
-				.on('click', callback);
-		})).catch(err => console.log(err));
+		.then(data => {
+			pois = data;
+			pois.forEach(poi => {
+				let callback = poiSelectionCallback(poi);
+				L.marker([poi.positionX, poi.positionY], {icon: blueIcon})
+					.addTo(mymap)
+					.on('click', callback);
+			})
+		}).catch(err => console.log(err));
 }
 
 function loginUser(username, password, displayError) {
@@ -236,9 +240,10 @@ function updateOwnRatings() {
 		empty = false;
 		let row = document.createElement("TR");
 		let col1 = document.createElement("TD");
-		let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
-		col1.innerText = createDate.toLocaleDateString("de-DE");
+		col1.innerText = getName(pois.find(poi => poi.osmId === rating.osmId))
 		let col2 = document.createElement("TD");
+		let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
+		col2.innerText = createDate.toLocaleDateString("de-DE");
 		let col3 = document.createElement("TD");
 		col3.innerText = rating.text;
 		let col4 = document.createElement("TD");
