@@ -7,11 +7,11 @@ import java.sql.Timestamp;
 public class User {
     private int id;
 
-    @Validator.Required
+    @Validator.Required()
     private String username;
 
-    @Validator.Required
-    @Validator.Regex(regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
+    @Validator.Required()
+    @Validator.Regex(regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", errorMessage = "Email invalid!")
     private String email;
 
     @Validator.Required

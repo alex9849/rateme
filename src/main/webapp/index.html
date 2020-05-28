@@ -28,7 +28,7 @@
                     <input type="password" name="password" required/>
 				</span>
                 <button type="submit" style="width: 100px;">Anmelden</button>
-                <span id="loginErrorArea" style="white-space: nowrap; color: red"></span>
+                <span id="loginErrorArea" style="white-space: nowrap; color: red;"></span>
                 <span style="float: right; white-space: nowrap">
                     <a id="showRegisterLink" href="#">Als neuer Benutzer registrieren</a>
                 </span>
@@ -37,7 +37,7 @@
         <div id="currentUserInfo" style="display: none">
             <span id="currentUserInfoHello" style="white-space: nowrap"></span>
             <button id="logoutButton" type="button" style="width: 100px;">Logout</button>
-            <span id="logoutErrorArea" style="white-space: nowrap"></span>
+            <span id="logoutErrorArea" style="white-space: nowrap; color: red;"></span>
         </div>
     </header>
     <article>
@@ -100,7 +100,7 @@
 </div>
 </body>
 
-<div id="registration" style="display : none">
+<div id="registration" style="display : none;">
     <form id="registrationForm">
         <table>
             <tr>
@@ -143,6 +143,10 @@
                     <canvas id="pwdCanvas" height="10" width="265"
                             style="border: 1px solid #d3d3d3; float: right;"></canvas>
                 </td>
+            </tr>
+            <tr>
+                <td> </td>
+                <td id="registrationErrorArea" style="white-space: nowrap; color: red;"></td>
             </tr>
 
             <tr>

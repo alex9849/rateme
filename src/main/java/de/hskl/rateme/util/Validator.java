@@ -1,6 +1,7 @@
 package de.hskl.rateme.util;
 
 import de.hskl.rateme.model.RatemeDbException;
+import de.hskl.rateme.model.ValidationException;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,12 +13,15 @@ public class Validator {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    public @interface Required {}
+    public @interface Required {
+        public String errorMessage() default "%fieldname% required!";
+    }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface Regex {
         public String regex();
+        public String errorMessage();
     }
 
     public static void validate(Object object) {
@@ -25,20 +29,20 @@ public class Validator {
             try {
                 field.setAccessible(true);
                 if(field.isAnnotationPresent(Required.class) && field.get(object) == null) {
-                    throw new RatemeDbException(object.getClass().getName() + "requires " + field.getName() + " to be a non-null value!");
+                    throw new ValidationException(field.getAnnotation(Required.class).errorMessage().replace("%fieldname%", field.getName()));
                 }
                 if(field.isAnnotationPresent(Regex.class) && field.get(object) != null) {
                     if(field.getType().equals(String.class)) {
                         String string = (String) field.get(object);
                         String regex = field.getAnnotation(Regex.class).regex();
                         if(!string.matches(regex)) {
-                            throw new RatemeDbException(object.getClass().getName() + "requires " + field.getName() + " to match the Regex \"" + regex + "\"!");
+                            throw new ValidationException(field.getAnnotation(Regex.class).errorMessage().replace("%fieldname%", field.getName()));
                         }
                     }
                 }
                 field.setAccessible(false);
             } catch (IllegalAccessException e) {
-                throw new RatemeDbException("Could not validate the field " + field.getName() + "on an " + object.getClass().getName() + "-Object!", e);
+                throw new ValidationException("Could not validate the field " + field.getName() + "on an " + object.getClass().getName() + "-Object!");
             }
 
         }

@@ -42,12 +42,12 @@ window.onload = function() {
 };
 
 function setupButtons() {
-	document.querySelector("#loginForm").addEventListener("submit", e => {loginUser(e.target.elements.username.value, e.target.elements.password.value); e.preventDefault();});
+	document.querySelector("#loginForm").addEventListener("submit", e => {e.preventDefault(); loginUser(e.target.elements.username.value, e.target.elements.password.value, true);});
 	document.querySelector("#showRegisterLink").addEventListener("click", e => switchRegistration());
 	document.querySelector("#registerAbort").addEventListener("click", e => hideRegistration());
 	document.querySelector("#logoutButton").addEventListener("click", e => logoutUser());
-	document.querySelector("#registerPassword").addEventListener("onkeyup", e => updatePasswordCanvas());
-	document.querySelector("#registrationForm").addEventListener("submit", e => {submitRegister(e); e.preventDefault();});
+	document.querySelector("#registerPassword").addEventListener("keyup", e => updatePasswordCanvas(e.target.value));
+	document.querySelector("#registrationForm").addEventListener("submit", e => {e.preventDefault(); submitRegister(e);});
 }
 
 function showPoisOnMap() {
@@ -61,7 +61,7 @@ function showPoisOnMap() {
 		})).catch(err => console.log(err));
 }
 
-function loginUser(username, password) {
+function loginUser(username, password, displayError) {
 	let data = {
 		username: username,
 		password: password
@@ -72,15 +72,19 @@ function loginUser(username, password) {
 		body: JSON.stringify(data)
 	};
 	fetch("rateme/user", cfg)
-		.then(response => response.json())
-		.then(data => {
-			currentUser = data;
-			updateRatingSubmitDiv();
-			updateHeader();
-		})
-		.catch(err => {
-			document.querySelector("#loginErrorArea").innerHTML = "Login failed!";
-		})
+		.then(response => {
+			if(response.status !== 200) {
+				if(displayError) {
+					document.querySelector("#loginErrorArea").innerHTML = "Login failed!";
+				}
+				return;
+			}
+			return response.json();
+		}).then(json => {
+		currentUser = json;
+		updateRatingSubmitDiv();
+		updateHeader();
+	});
 }
 
 function logoutUser() {
@@ -89,14 +93,15 @@ function logoutUser() {
 		headers: { 'Content-type': 'application/json' }
 	};
 	fetch("rateme/user", cfg)
-		.then(data => {
+		.then(response => {
+			if(response.status !== 200) {
+				document.querySelector("#logoutErrorArea").innerHTML = "Logout failed!";
+				return;
+			}
 			currentUser = null;
 			updateRatingSubmitDiv();
 			updateHeader();
-		})
-		.catch(err => {
-			document.querySelector("#logoutErrorArea").innerHTML = "Logout failed!";
-		})
+		});
 }
 
 function submitRegister(e) {
@@ -120,7 +125,16 @@ function submitRegister(e) {
 	};
 	fetch("rateme/user", cfg)
 		.then(response => {
-			loginUser(username, password);
+			//IF error
+			if(!response.ok) {
+				if(response.status === 422) {
+					let json = response.json().then(json => document.querySelector("#registrationErrorArea").innerHTML = json.message);
+				} else {
+					document.querySelector("#registrationErrorArea").innerHTML = "Error";
+				}
+				return;
+			}
+			loginUser(username, password, false);
 			hideRegistration();
 		});
 }
@@ -212,8 +226,7 @@ function updateRatingSubmitDiv() {
 	}
 }
 
-function updatePasswordCanvas() {
-	let registerPassword = document.querySelector("#registerPassword").value;
+function updatePasswordCanvas(registerPassword) {
 	let length = registerPassword.length;
 	let regexSecialSign = /[!ยง$&?]/;
 	let regexNumbers = /[1234567890]/;

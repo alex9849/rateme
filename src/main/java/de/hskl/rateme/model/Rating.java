@@ -9,7 +9,7 @@ public class Rating {
     private int userId;
     private long osmId;
     @Validator.Required
-    @Validator.Regex(regex = "(image|grade)")
+    @Validator.Regex(regex = "(image|grade)", errorMessage = "%fieldname% needs to be image or grade")
     private String ratingType;
     private int grade;
     @Validator.Required
