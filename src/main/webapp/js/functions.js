@@ -284,7 +284,7 @@ function updatePoiRatings(poi) {
 				bewertungsDiv.appendChild(stars);
 				let divText = document.createElement("div");
 				let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
-				divText.innerText = "nutzer schreibt am " + createDate.toLocaleDateString("de-DE") + ":";
+				divText.innerText = rating.username + " schreibt am " + createDate.toLocaleDateString("de-DE") + ":";
 				bewertungsDiv.appendChild(divText);
 				let text = document.createElement("div");
 				text.innerText = rating.text;

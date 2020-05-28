@@ -36,7 +36,7 @@ public class RatingDB {
 
     public Rating loadRating(int ratingId) {
         try (Connection con = DBConnection.getInstance().getConnection()){
-            PreparedStatement pStmt = con.prepareStatement("select * from rateme_rating where rating_id = ?");
+            PreparedStatement pStmt = con.prepareStatement("select r.*, u.username as username from rateme_rating r join rateme_user u on r.user_id = u.user_id where r.rating_id = ?");
             pStmt.setInt(1, ratingId);
             pStmt.execute();
             ResultSet rs = pStmt.getResultSet();
@@ -53,7 +53,7 @@ public class RatingDB {
     public Collection<Rating> loadRatingsForPoi(long osmId) {
         List<Rating> ratings = new ArrayList<>();
         try (Connection con = DBConnection.getInstance().getConnection()){
-            PreparedStatement pStmt = con.prepareStatement("select * from rateme_rating where osm_id = ?");
+            PreparedStatement pStmt = con.prepareStatement("select r.*, u.username as username from rateme_rating r join rateme_user u on r.user_id = u.user_id where r.osm_id = ?");
             pStmt.setLong(1, osmId);
             pStmt.execute();
             ResultSet rs = pStmt.getResultSet();
@@ -70,7 +70,7 @@ public class RatingDB {
     public Collection<Rating> loadRatingsForUser(int userId) {
         List<Rating> ratings = new ArrayList<>();
         try (Connection con = DBConnection.getInstance().getConnection()){
-            PreparedStatement pStmt = con.prepareStatement("select * from rateme_rating where user_id = ?");
+            PreparedStatement pStmt = con.prepareStatement("select r.*, u.username as username from rateme_rating r join rateme_user u on r.user_id = u.user_id where r.user_id = ?");
             pStmt.setInt(1, userId);
             pStmt.execute();
             ResultSet rs = pStmt.getResultSet();
@@ -95,6 +95,7 @@ public class RatingDB {
         rating.setImagePath(rs.getString("image_path"));
         rating.setCreateDt(rs.getDate("create_dt"));
         rating.setModifyDt(rs.getDate("modify_dt"));
+        rating.setUsername(rs.getString("username"));
         return rating;
     }
 

@@ -6,6 +6,7 @@ import java.sql.Date;
 
 public class Rating {
     private int id;
+    private String username;
     private int userId;
     private long osmId;
     @Validator.Required
@@ -88,5 +89,13 @@ public class Rating {
 
     public void setModifyDt(Date modifyDt) {
         this.modifyDt = modifyDt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
