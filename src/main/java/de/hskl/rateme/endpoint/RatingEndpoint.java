@@ -1,10 +1,13 @@
 package de.hskl.rateme.endpoint;
 
+import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
+import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.Rating;
 import de.hskl.rateme.service.AccessService;
 import de.hskl.rateme.service.RatingService;
 import de.hskl.rateme.util.Validator;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,6 +17,8 @@ import javax.ws.rs.core.Response;
 import java.util.UUID;
 
 @Path("/rating")
+@RegisterProvider(ValidatorExceptionMapper.class)
+@RegisterProvider(RatemeDbExceptionMapper.class)
 @Singleton
 public class RatingEndpoint {
     @Inject

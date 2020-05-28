@@ -1,8 +1,11 @@
 package de.hskl.rateme.endpoint;
 
 import de.hskl.rateme.db.PoiTagDB;
+import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
+import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.PoiTag;
 import de.hskl.rateme.service.PoiService;
+import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,6 +18,8 @@ import javax.ws.rs.core.Response;
 import java.util.Collection;
 
 @Path("/poitag")
+@RegisterProvider(ValidatorExceptionMapper.class)
+@RegisterProvider(RatemeDbExceptionMapper.class)
 @Singleton
 public class PoiTagEndpoint {
     @Inject

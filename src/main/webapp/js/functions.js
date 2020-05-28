@@ -127,11 +127,7 @@ function submitRegister(e) {
 		.then(response => {
 			//IF error
 			if(!response.ok) {
-				if(response.status === 422) {
-					let json = response.json().then(json => document.querySelector("#registrationErrorArea").innerHTML = json.message);
-				} else {
-					document.querySelector("#registrationErrorArea").innerHTML = "Error";
-				}
+				response.json().then(json => document.querySelector("#registrationErrorArea").innerHTML = json.message);
 				return;
 			}
 			loginUser(username, password, false);

@@ -1,6 +1,6 @@
 package de.hskl.rateme.exceptionmapper;
 
-import de.hskl.rateme.model.ValidationException;
+import de.hskl.rateme.model.RatemeDbException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -8,13 +8,13 @@ import javax.ws.rs.ext.Provider;
 import java.util.Date;
 
 @Provider
-public class ValidatorExceptionMapper implements ExceptionMapper<ValidationException> {
+public class RatemeDbExceptionMapper implements ExceptionMapper<RatemeDbException> {
     @Override
-    public Response toResponse(ValidationException e) {
+    public Response toResponse(RatemeDbException e) {
         ExceptionResponse response = new ExceptionResponse();
-        response.setStatus(422);
+        response.setStatus(500);
         response.setTimestamp(new Date());
         response.setMessage(e.getMessage());
-        return Response.status(422).entity(response).build();
+        return Response.status(500).entity(response).build();
     }
 }
