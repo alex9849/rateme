@@ -23,8 +23,6 @@ import java.util.UUID;
 @Singleton
 public class UserEndpoint {
     @Inject
-    UserDB userDB;
-    @Inject
     UserService userService;
 
     @PUT

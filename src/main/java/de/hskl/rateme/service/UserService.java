@@ -28,6 +28,10 @@ public class UserService {
         return user;
     }
 
+    public User loadUser(int id) {
+        return userDB.loadUser(id);
+    }
+
     public UUID loginUser(LoginData loginData) throws InvalidKeySpecException, NoSuchAlgorithmException {
         User user = userDB.loadUser(loginData.getUsername());
         if(user == null) {

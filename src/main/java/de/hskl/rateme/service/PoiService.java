@@ -23,4 +23,8 @@ public class PoiService {
     public Collection<PoiTag> getPoiTags(long poiId) {
         return poiTagDB.loadTagsForPoi(poiId);
     }
+
+    public Poi getPoi(long poiId) {
+        return poiDB.loadPoi(poiId);
+    }
 }

@@ -1,13 +1,18 @@
 package de.hskl.rateme.model;
 
+import de.hskl.rateme.util.Validator;
+
 import java.sql.Timestamp;
 
 public class Rating {
     private int id;
     private int userId;
     private long osmId;
+    @Validator.Required
+    @Validator.Regex(regex = "(image|grade)")
     private String ratingType;
     private int grade;
+    @Validator.Required
     private String text;
     private String imagePath;
     private Timestamp createDt;
