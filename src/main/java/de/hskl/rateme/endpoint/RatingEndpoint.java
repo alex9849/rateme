@@ -34,9 +34,9 @@ public class RatingEndpoint {
     }
 
     @GET
-    @Path("/user/{userid}")
+    @Path("/own")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString, @PathParam("userid") int poiId) {
+    public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString) {
         if(loginIdString == null) {
             return Response.status(401).build();
         }
@@ -44,7 +44,7 @@ public class RatingEndpoint {
         if(!accessService.isLoggedIn(loginId)) {
             return Response.status(401).build();
         }
-        return Response.ok().entity(ratingService.getRatingsByUser(poiId)).build();
+        return Response.ok().entity(ratingService.getRatingsByUser(accessService.getUserId(loginId))).build();
     }
 
     @PUT

@@ -2,7 +2,8 @@ let mymap;
 let redIcon;
 let blueIcon;
 let selectedMarker;
-let currentUser;
+let currentUser = null;
+let ownRatings = [];
 
 window.onload = function() {
 	setupButtons();
@@ -39,6 +40,7 @@ window.onload = function() {
 	});
 
 	showPoisOnMap();
+	updateOwnRatings();
 };
 
 function setupButtons() {
@@ -84,7 +86,25 @@ function loginUser(username, password, displayError) {
 		currentUser = json;
 		updateRatingSubmitDiv();
 		updateHeader();
+		loadOwnRatings();
 	});
+}
+
+function loadOwnRatings() {
+	if(currentUser === null) {
+		ownRatings = {};
+		return;
+	}
+	let config = {
+		method: 'GET',
+		headers: { 'Content-type': 'application/json' }
+	};
+	fetch("/rateme/rating/own")
+		.then(response => response.json())
+		.then(json => {
+			ownRatings = json;
+			updateOwnRatings();
+		})
 }
 
 function logoutUser() {
@@ -101,6 +121,7 @@ function logoutUser() {
 			currentUser = null;
 			updateRatingSubmitDiv();
 			updateHeader();
+			updateOwnRatings();
 		});
 }
 
@@ -188,9 +209,72 @@ function generateTagTable(tags) {
 	return tagtable;
 }
 
+function generateStars(number) {
+	let fieldset = document.createElement("FIELDSET");
+	fieldset.setAttributeNode(document.createAttribute("disabed"));
+	fieldset.className = "rating";
+	for(let i = 1; i <= 5; i++) {
+		let label = document.createElement("label");
+		let star = document.createElement("INPUT");
+		star.setAttribute("type", "radio");
+		star.setAttribute("name", "rating");
+		star.setAttribute("value", i);
+		if(i === number) {
+			star.setAttributeNode(document.createAttribute("checked"))
+		}
+		fieldset.appendChild(star);
+		fieldset.appendChild(label);
+	}
+	return fieldset;
+}
+
 /* #########################
 ######### Updaters #########
 ######################### */
+
+function updateOwnRatings() {
+	let ownRatingsArea = document.querySelector("#ownRatingsArea");
+	let table = document.createElement("TABLE");
+	table.className += "ownRatingsTable";
+	let empty = true;
+	let i = 0;
+	for(let rating of ownRatings) {
+		i++;
+		empty = false;
+		let row = document.createElement("TR");
+		let col1 = document.createElement("TD");
+		let createDate = new Date(rating.createDt);
+		col1.innerText = rating.createDt;//createDate.toLocaleDateString("de-DE") + " " + createDate.toLocaleDateString("de-DE");
+		let col2 = document.createElement("TD");
+		let col3 = document.createElement("TD");
+		col3.innerText = rating.text;
+		let col4 = document.createElement("TD");
+		col4.appendChild(generateStars(rating.grade));
+		let col5 = document.createElement("TD");
+
+		row.appendChild(col1);
+		row.appendChild(col2);
+		row.appendChild(col3);
+		row.appendChild(col4);
+		row.appendChild(col5);
+		if(i % 2 === 1) {
+			row.style.backgroundColor = "#F3E2A9";
+		} else {
+			row.style.backgroundColor = "#F9EECF";
+		}
+		table.appendChild(row);
+	}
+	ownRatingsArea.innerHTML = "";
+	if(currentUser == null) {
+		ownRatingsArea.innerHTML = "Du bist nicht eingeloggt!";
+		return;
+	}
+	if(empty) {
+		ownRatingsArea.innerHTML = "Du hast noch nichts bewertet!";
+	} else {
+		ownRatingsArea.appendChild(table);
+	}
+}
 
 function updatePubHeadline(poi) {
 	let infolink = document.createElement("a");

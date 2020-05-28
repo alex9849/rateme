@@ -39,13 +39,11 @@ header {
     grid-area: login;
 }
 
-
 article {
 	border-bottom: 2px solid #fff;
     background: white;
     grid-area: map;
 }
-
 
 aside {
     padding: 10px;
@@ -60,6 +58,11 @@ footer {
 	border-bottom: 2px solid #fff;
     background: #D8D8D8;
     grid-area: userRating;
+}
+
+.ownRatingsTable {
+    width: 100%;
+    border: 1px solid black;
 }
 
 #bewertungsAbgabenDiv {
