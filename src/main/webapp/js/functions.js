@@ -182,10 +182,11 @@ function submitRegister(e) {
 	};
 	fetch("rateme/user", cfg)
 		.then(response => {
-			//IF error
 			if(!response.ok) {
 				response.json().then(json => document.querySelector("#registrationErrorArea").innerHTML = json.message);
 				return;
+			} else {
+				document.querySelector("#registrationErrorArea").innerHTML = "";
 			}
 			loginUser(username, password, false);
 			hideRegistration();
@@ -221,12 +222,15 @@ function submitRating(e) {
 		};
 		fetch("rateme/rating/", config)
 			.then(response => {
-				if(response.ok) {
-					fetchPoiRatings()
-						.then(updatePoiRatings);
-					fetchOwnRatings()
-						.then(updateOwnRatings);
+				if(!response.ok) {
+					response.json().then(json => document.querySelector("#submitRatingErrorArea").innerHTML = json.message);
+					return;
 				}
+				document.querySelector("#submitRatingErrorArea").innerHTML = "";
+				fetchPoiRatings()
+					.then(updatePoiRatings);
+				fetchOwnRatings()
+					.then(updateOwnRatings);
 			});
 	};
 	reader.readAsDataURL(sendFile);
@@ -316,9 +320,11 @@ function updateOwnRatings() {
 		let col4 = document.createElement("TD");
 		col4.appendChild(generateStars(rating.grade));
 		let col5 = document.createElement("TD");
-		let image = document.createElement("img");
-		image.setAttribute("src", rating.image);
-		col5.appendChild(image);
+		if(rating.image !== null) {
+			let image = document.createElement("img");
+			image.setAttribute("src", rating.image);
+			col5.appendChild(image);
+		}
 
 		row.appendChild(col1);
 		row.appendChild(col2);
@@ -359,9 +365,11 @@ function updatePoiRatings() {
 		let text = document.createElement("div");
 		text.innerText = rating.text;
 		bewertungsDiv.appendChild(text);
-		let image = document.createElement("img");
-		image.setAttribute("src", rating.image);
-		bewertungsDiv.appendChild(image);
+		if(rating.image !== null) {
+			let image = document.createElement("img");
+			image.setAttribute("src", rating.image);
+			bewertungsDiv.appendChild(image);
+		}
 		let br = document.createElement("br");
 		bewertungsDiv.appendChild(br);
 	}

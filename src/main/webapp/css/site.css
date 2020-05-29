@@ -83,6 +83,13 @@ footer {
     border: 1px dotted black;
 }
 
+.tableErrorArea {
+    white-space: pre-wrap;
+    color: red;
+    max-width: available;
+    word-break: break-word;
+}
+
 #bewertungsDiv {
     width: 300px;
     background: #F9EECF;

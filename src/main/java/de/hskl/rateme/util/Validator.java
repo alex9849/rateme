@@ -31,12 +31,10 @@ public class Validator {
                     throw new ValidationException(field.getAnnotation(Required.class).errorMessage().replace("%fieldname%", field.getName()));
                 }
                 if(field.isAnnotationPresent(Regex.class) && field.get(object) != null) {
-                    if(field.getType().equals(String.class)) {
-                        String string = (String) field.get(object);
-                        String regex = field.getAnnotation(Regex.class).regex();
-                        if(!string.matches(regex)) {
-                            throw new ValidationException(field.getAnnotation(Regex.class).errorMessage().replace("%fieldname%", field.getName()));
-                        }
+                    String string = String.valueOf(field.get(object));
+                    String regex = field.getAnnotation(Regex.class).regex();
+                    if(!string.matches(regex)) {
+                        throw new ValidationException(field.getAnnotation(Regex.class).errorMessage().replace("%fieldname%", field.getName()));
                     }
                 }
                 field.setAccessible(false);

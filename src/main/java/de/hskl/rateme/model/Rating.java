@@ -12,8 +12,10 @@ public class Rating {
     @Validator.Required
     @Validator.Regex(regex = "(image|grade)", errorMessage = "%fieldname% needs to be image or grade")
     private String ratingType;
+    @Validator.Regex(regex = "[1-5]", errorMessage = "Bewertung benötigt!")
     private int grade;
     @Validator.Required
+    @Validator.Regex(regex = "^.+$", errorMessage = "Kommentar benötigt!")
     private String text;
     @Validator.Regex(regex = "data:image\\/png;base64,(.)+", errorMessage = "%fieldname% needs to be a png file!")
     private String image;
