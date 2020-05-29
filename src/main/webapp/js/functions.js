@@ -51,6 +51,7 @@ function setupButtons() {
 	document.querySelector("#logoutButton").addEventListener("click", e => logoutUser());
 	document.querySelector("#registerPassword").addEventListener("keyup", e => updatePasswordCanvas(e.target.value));
 	document.querySelector("#registrationForm").addEventListener("submit", e => {e.preventDefault(); submitRegister(e);});
+	document.querySelector("#submitRatingForm").addEventListener("submit", e => {e.preventDefault(); submitRating(e);});
 }
 
 function showPoisOnMap() {
@@ -158,6 +159,63 @@ function submitRegister(e) {
 			loginUser(username, password, false);
 			hideRegistration();
 		});
+}
+
+function submitRating(e) {
+	let grade = 0;
+	for(let radio of document.getElementsByName("rating")) {
+		if(radio.checked) {
+			grade = radio.value;
+		}
+	}
+	let sendFile = null;
+	for(let file of e.target.elements.ratingFile.files) {
+		sendFile = file;
+	}
+
+	/*let data = {
+		text: e.target.elements.ratingText,
+		grade: grade,
+		image: sendFile
+	};
+	let config = {
+		method: 'PUT',
+		body: data,
+		contentType: 'application/json'
+	};
+	fetch("rateme/rating", config)
+		.then(response => {
+			console.log(response.ok);
+		});
+*/
+	var reader = new FileReader();
+
+
+	let data = {
+		text: e.target.elements.ratingText.value,
+		grade: grade,
+		image: {
+			name: sendFile.name,
+			lastModified: sendFile.lastModified,
+			size: sendFile.size,
+			type: sendFile.type
+		}
+	};
+	reader.onload = function(fileData) {
+		data.image = fileData.target.result;
+		let config = {
+			method: 'PUT',
+			body: JSON.stringify(data),
+			contentType: 'application/json'
+		};
+		fetch("rateme/rating", config)
+			.then(response => {
+				console.log(response.ok);
+			});
+	};
+	reader.readAsDataURL(sendFile);
+	document.querySelector("#submitRatingErrorArea");
+	console.log(data);
 }
 
 function poiSelectionCallback(poi) {

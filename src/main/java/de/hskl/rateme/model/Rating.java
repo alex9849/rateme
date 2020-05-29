@@ -15,7 +15,8 @@ public class Rating {
     private int grade;
     @Validator.Required
     private String text;
-    private String imagePath;
+    @Validator.Regex(regex = "data:image\\/png;base64,(.)+", errorMessage = "%fieldname% needs to be a png file!")
+    private String image;
     private Date createDt;
     private Date modifyDt;
 
@@ -67,12 +68,12 @@ public class Rating {
         this.text = text;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImage() {
+        return image;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Date getCreateDt() {

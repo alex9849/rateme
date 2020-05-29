@@ -20,7 +20,7 @@ public class RatingDB {
             pstmt.setString(3, rating.getRatingType());
             pstmt.setInt(4, rating.getGrade());
             pstmt.setString(5, rating.getText());
-            pstmt.setString(6, rating.getImagePath());
+            pstmt.setString(6, rating.getImage());
             pstmt.execute();
             ResultSet genKeys = pstmt.getGeneratedKeys();
             while (genKeys.next()) {
@@ -92,7 +92,7 @@ public class RatingDB {
         rating.setRatingType(rs.getString("rating_type"));
         rating.setGrade(rs.getInt("grade"));
         rating.setText(rs.getString("txt"));
-        rating.setImagePath(rs.getString("image_path"));
+        rating.setImage(rs.getString("image_path"));
         rating.setCreateDt(rs.getDate("create_dt"));
         rating.setModifyDt(rs.getDate("modify_dt"));
         rating.setUsername(rs.getString("username"));
