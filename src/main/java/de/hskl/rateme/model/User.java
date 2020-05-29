@@ -3,37 +3,44 @@ package de.hskl.rateme.model;
 import de.hskl.rateme.util.Validator;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 
 public class User {
     private int id;
 
     @Validator.Required()
+    @Validator.Regex(regex = "^.+$", errorMessage = "Nutzername benötigt!")
     private String username;
 
     @Validator.Required()
-    @Validator.Regex(regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", errorMessage = "Email invalid!")
+    @Validator.Regex(regex = "^[a-z]{4,4}[0-9]{4,4}@(stud\\.(hs|fh)-kl\\.de)$", errorMessage = "Hochschul-Email benötigt! (klein geschrieben)")
     private String email;
 
     @Validator.Required
+    @Validator.Regex(regex = "^[A-Z]([^0-9\\§\\%\\&\\!\\?])+?[a-z]$", errorMessage = "Vorname muss mit einem Großbuchstaben anfange und mit einem Kleinbuchstaben enden")
     private String firstname;
 
     @Validator.Required
+    @Validator.Regex(regex = "^[A-Z]([^0-9\\§\\%\\&\\!\\?])+?[a-z]$", errorMessage = "Nachname muss mit einem Großbuchstaben anfange und mit einem Kleinbuchstaben enden")
     private String lastname;
 
     @Validator.Required
+    @Validator.Regex(regex = "^.+$", errorMessage = "Straße benötigt!")
     private String street;
 
-    @Validator.Required
+    @Validator.Required(errorMessage = "Hausnummer benötigt!")
+    @Validator.Regex(regex = "^[0-9]+$", errorMessage = "HausNUMMER benötigt!")
     private String streetNr;
 
     @Validator.Required
+    @Validator.Regex(regex = "^[0-9]{5,5}$", errorMessage = "Postleitzahl muss aus 5 Zahlen bestehen!")
     private String zip;
 
     @Validator.Required
+    @Validator.Regex(regex = "^.+$", errorMessage = "Stadt benötigt!")
     private String city;
 
     @Validator.Required
+    @Validator.Regex(regex = "^.+$", errorMessage = "Passwort benötigt!")
     private String password;
 
     private Date createDt;

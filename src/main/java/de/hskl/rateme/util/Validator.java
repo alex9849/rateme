@@ -13,7 +13,7 @@ public class Validator {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface Required {
-        public String errorMessage() default "%fieldname% required!";
+        public String errorMessage() default "%fieldname% benötigt!";
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -41,7 +41,7 @@ public class Validator {
                 }
                 field.setAccessible(false);
             } catch (IllegalAccessException e) {
-                throw new ValidationException("Could not validate the field " + field.getName() + "on an " + object.getClass().getName() + "-Object!");
+                throw new ValidationException("Konnte Feld mit dem Namen " + field.getName() + " in einem " + object.getClass().getName() + "-Objekt nicht validieren!");
             }
 
         }
