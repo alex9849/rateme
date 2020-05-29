@@ -4,7 +4,9 @@ let blueIcon;
 let selectedMarker;
 let currentUser = null;
 let ownRatings = [];
+let poiRatings = [];
 let pois = [];
+let currentPoi = null;
 
 window.onload = function() {
 	setupButtons();
@@ -55,17 +57,62 @@ function setupButtons() {
 }
 
 function showPoisOnMap() {
-	fetch("rateme/poi")
-		.then(response => response.json())
-		.then(data => {
-			pois = data;
+	fetchPois()
+		.then(pois => {
 			pois.forEach(poi => {
 				let callback = poiSelectionCallback(poi);
 				L.marker([poi.positionX, poi.positionY], {icon: blueIcon})
 					.addTo(mymap)
 					.on('click', callback);
+			});
+		});
+}
+
+function fetchPois() {
+	return new Promise((resolve, reject) => {
+		fetch("rateme/poi")
+			.then(response => response.json())
+			.then(data => {
+				pois = data;
+				resolve(data);
+			}).catch(reject);
+	})
+}
+
+function fetchOwnRatings() {
+	return new Promise((resolve, reject) => {
+		if(currentUser === null) {
+			ownRatings = {};
+			return;
+		}
+		let config = {
+			method: 'GET',
+			headers: { 'Content-type': 'application/json' }
+		};
+		fetch("/rateme/rating/own")
+			.then(response => response.json())
+			.then(json => {
+				ownRatings = json;
+				resolve(json);
 			})
-		}).catch(err => console.log(err));
+			.catch(reject);
+	});
+}
+
+function fetchPoiRatings() {
+	return new Promise(((resolve, reject) => {
+		let config = {
+			method: 'GET',
+			headers: { 'Content-type': 'application/json' }
+		};
+		fetch("/rateme/rating/poi/" + currentPoi.osmId, config)
+			.then(response => response.json())
+			.then(json => {
+				poiRatings = json;
+				resolve(json);
+			})
+			.catch(reject);
+	}))
 }
 
 function loginUser(username, password, displayError) {
@@ -91,25 +138,9 @@ function loginUser(username, password, displayError) {
 		currentUser = json;
 		updateRatingSubmitDiv();
 		updateHeader();
-		loadOwnRatings();
+		fetchOwnRatings()
+			.then(updateOwnRatings);
 	});
-}
-
-function loadOwnRatings() {
-	if(currentUser === null) {
-		ownRatings = {};
-		return;
-	}
-	let config = {
-		method: 'GET',
-		headers: { 'Content-type': 'application/json' }
-	};
-	fetch("/rateme/rating/own")
-		.then(response => response.json())
-		.then(json => {
-			ownRatings = json;
-			updateOwnRatings();
-		})
 }
 
 function logoutUser() {
@@ -172,50 +203,34 @@ function submitRating(e) {
 	for(let file of e.target.elements.ratingFile.files) {
 		sendFile = file;
 	}
-
-	/*let data = {
-		text: e.target.elements.ratingText,
-		grade: grade,
-		image: sendFile
-	};
-	let config = {
-		method: 'PUT',
-		body: data,
-		contentType: 'application/json'
-	};
-	fetch("rateme/rating", config)
-		.then(response => {
-			console.log(response.ok);
-		});
-*/
 	var reader = new FileReader();
-
-
 	let data = {
 		text: e.target.elements.ratingText.value,
 		grade: grade,
-		image: {
-			name: sendFile.name,
-			lastModified: sendFile.lastModified,
-			size: sendFile.size,
-			type: sendFile.type
-		}
+		osmId: currentPoi.osmId,
+		ratingType: 'image'
 	};
 	reader.onload = function(fileData) {
 		data.image = fileData.target.result;
 		let config = {
 			method: 'PUT',
 			body: JSON.stringify(data),
-			contentType: 'application/json'
+			headers: {
+				'Content-type': 'application/json'
+			}
 		};
-		fetch("rateme/rating", config)
+		fetch("rateme/rating/", config)
 			.then(response => {
-				console.log(response.ok);
+				if(response.ok) {
+					fetchPoiRatings()
+						.then(updatePoiRatings);
+					fetchOwnRatings()
+						.then(updateOwnRatings);
+				}
 			});
 	};
 	reader.readAsDataURL(sendFile);
 	document.querySelector("#submitRatingErrorArea");
-	console.log(data);
 }
 
 function poiSelectionCallback(poi) {
@@ -225,13 +240,14 @@ function poiSelectionCallback(poi) {
 		}
 		selectedMarker = event.target;
 		selectedMarker.setIcon(redIcon);
+		currentPoi = poi;
 
-		updatePubHeadline(poi);
-		updatePoiRatings(poi);
+		updatePubHeadline();
 		hideInfoArea();
 		let infoArea = document.querySelector("#infoarea");
 		infoArea.innerHTML = '';
 		infoArea.appendChild(generateTagTable(poi.poiTags));
+		fetchPoiRatings().then(updatePoiRatings);
 		updateRatingSubmitDiv();
 	}
 }
@@ -328,48 +344,39 @@ function updateOwnRatings() {
 	}
 }
 
-function updatePoiRatings(poi) {
+function updatePoiRatings() {
 	let bewertungsDiv = document.querySelector("#bewertungsDiv");
-	let config = {
-		method: 'GET',
-		headers: { 'Content-type': 'application/json' }
-	};
-	fetch("/rateme/rating/poi/" + poi.osmId, config)
-		.then(response => response.json())
-		.then(json => {
-			bewertungsDiv.innerHTML = "";
-			let empty = true;
-			for(rating of json) {
-				empty = false;
-				let stars = generateStars(rating.grade);
-				bewertungsDiv.appendChild(stars);
-				let divText = document.createElement("div");
-				let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
-				divText.innerText = rating.username + " schreibt am " + createDate.toLocaleDateString("de-DE") + ":";
-				bewertungsDiv.appendChild(divText);
-				let text = document.createElement("div");
-				text.innerText = rating.text;
-				bewertungsDiv.appendChild(text);
-				let image = document.createElement("img");
-				image.setAttribute("src", rating.image);
-				bewertungsDiv.appendChild(image);
-				let br = document.createElement("br");
-				bewertungsDiv.appendChild(br);
-			}
-			if(empty) {
-				bewertungsDiv.innerHTML = "Noch keine Bewertungen!"
-			}
-		})
-
+	bewertungsDiv.innerHTML = "";
+	let empty = true;
+	for(rating of poiRatings) {
+		empty = false;
+		let stars = generateStars(rating.grade);
+		bewertungsDiv.appendChild(stars);
+		let divText = document.createElement("div");
+		let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
+		divText.innerText = rating.username + " schreibt am " + createDate.toLocaleDateString("de-DE") + ":";
+		bewertungsDiv.appendChild(divText);
+		let text = document.createElement("div");
+		text.innerText = rating.text;
+		bewertungsDiv.appendChild(text);
+		let image = document.createElement("img");
+		image.setAttribute("src", rating.image);
+		bewertungsDiv.appendChild(image);
+		let br = document.createElement("br");
+		bewertungsDiv.appendChild(br);
+	}
+	if(empty) {
+		bewertungsDiv.innerHTML = "Noch keine Bewertungen!"
+	}
 }
 
-function updatePubHeadline(poi) {
+function updatePubHeadline() {
 	let infolink = document.createElement("a");
 	infolink.innerText = "Infos";
 	let linkAtt = document.createAttribute("href");
 	linkAtt.value = "javascript:switchInfoArea()";
 	infolink.setAttributeNode(linkAtt);
-	document.querySelector("#pubheadline").innerHTML = getName(poi) + " (" + infolink.outerHTML + ")";
+	document.querySelector("#pubheadline").innerHTML = getName(currentPoi) + " (" + infolink.outerHTML + ")";
 }
 
 function updateHeader() {

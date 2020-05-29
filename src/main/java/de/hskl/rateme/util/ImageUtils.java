@@ -20,7 +20,7 @@ public class ImageUtils {
     public static BufferedImage resizeImage(BufferedImage image, int width, int hight) {
         BufferedImage resized = new BufferedImage(width, hight, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = resized.createGraphics();
-        graphics.drawImage(image, 0, 0, width, width, null);
+        graphics.drawImage(image, 0, 0, width, hight, null);
         graphics.dispose();
         return resized;
     }
@@ -28,6 +28,6 @@ public class ImageUtils {
     public static String toBase64Image(BufferedImage image) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ImageIO.write(image, "png", out);
-        return Base64.getEncoder().encodeToString(out.toByteArray());
+        return "data:image/png;base64," + Base64.getEncoder().encodeToString(out.toByteArray());
     }
 }

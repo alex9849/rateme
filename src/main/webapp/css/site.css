@@ -12,7 +12,11 @@ footer { display: none; }
     "map" 
     "rating" 
   ; 
-} 
+}
+
+body {
+    margin: 0px;
+}
 
 @media screen and (min-width: 44.001em) { 
   footer { display: block; }
@@ -58,6 +62,7 @@ footer {
 	border-bottom: 2px solid #fff;
     background: #D8D8D8;
     grid-area: userRating;
+    /*overflow: auto;*/
 }
 
 .ownRatingsTable {
