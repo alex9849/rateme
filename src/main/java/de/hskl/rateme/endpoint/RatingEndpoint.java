@@ -73,7 +73,9 @@ public class RatingEndpoint {
         Validator.validate(rating);
         if(rating.getImage() != null) {
             BufferedImage img = ImageUtils.readBase64Image(rating.getImage());
-            img = ImageUtils.resizeImage(img, img.getWidth() / 2, img.getHeight() / 2);
+            double hight = 60;
+            double witdh = img.getWidth() / (img.getHeight() / hight);
+            img = ImageUtils.resizeImage(img, (int) witdh, (int) hight);
             File out = new File("image.png");
             ImageIO.write(img, "png", out);
         }

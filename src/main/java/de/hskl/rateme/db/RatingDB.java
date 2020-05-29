@@ -13,7 +13,7 @@ public class RatingDB {
 
     public int createRating(Rating rating) {
         try (Connection con = DBConnection.getInstance().getConnection()){
-            PreparedStatement pstmt = con.prepareStatement("insert into rateme_rating (user_id, osm_id, rating_type, grade, txt, image_path) VALUES (?, ?, ?, ?, ?, ?)",
+            PreparedStatement pstmt = con.prepareStatement("insert into rateme_rating (user_id, osm_id, rating_type, grade, txt, image) VALUES (?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, rating.getUserId());
             pstmt.setLong(2, rating.getOsmId());
@@ -92,7 +92,7 @@ public class RatingDB {
         rating.setRatingType(rs.getString("rating_type"));
         rating.setGrade(rs.getInt("grade"));
         rating.setText(rs.getString("txt"));
-        rating.setImage(rs.getString("image_path"));
+        rating.setImage(rs.getString("image"));
         rating.setCreateDt(rs.getDate("create_dt"));
         rating.setModifyDt(rs.getDate("modify_dt"));
         rating.setUsername(rs.getString("username"));
