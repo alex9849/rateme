@@ -129,7 +129,7 @@ function loginUser(username, password, displayError) {
 		.then(response => {
 			if(response.status !== 200) {
 				if(displayError) {
-					document.querySelector("#loginErrorArea").innerHTML = "Login failed!";
+					document.querySelector("#loginErrorArea").innerText = "Login failed!";
 				}
 				return;
 			}
@@ -151,7 +151,7 @@ function logoutUser() {
 	fetch("rateme/user", cfg)
 		.then(response => {
 			if(response.status !== 200) {
-				document.querySelector("#logoutErrorArea").innerHTML = "Logout failed!";
+				document.querySelector("#logoutErrorArea").innerText = "Logout failed!";
 				return;
 			}
 			currentUser = null;
@@ -183,10 +183,10 @@ function submitRegister(e) {
 	fetch("rateme/user", cfg)
 		.then(response => {
 			if(!response.ok) {
-				response.json().then(json => document.querySelector("#registrationErrorArea").innerHTML = json.message);
+				response.json().then(json => document.querySelector("#registrationErrorArea").innerText = json.message);
 				return;
 			} else {
-				document.querySelector("#registrationErrorArea").innerHTML = "";
+				document.querySelector("#registrationErrorArea").innerText = "";
 			}
 			loginUser(username, password, false);
 			hideRegistration();
@@ -222,10 +222,10 @@ function submitRating(e) {
 		fetch("rateme/rating/", config)
 			.then(response => {
 				if(!response.ok) {
-					response.json().then(json => document.querySelector("#submitRatingErrorArea").innerHTML = json.message);
+					response.json().then(json => document.querySelector("#submitRatingErrorArea").innerText = json.message);
 					return;
 				}
-				document.querySelector("#submitRatingErrorArea").innerHTML = "";
+				document.querySelector("#submitRatingErrorArea").innerText = "";
 				fetchPoiRatings()
 					.then(updatePoiRatings);
 				fetchOwnRatings()
@@ -258,7 +258,7 @@ function poiSelectionCallback(poi) {
 		updatePubHeadline();
 		hideInfoArea();
 		let infoArea = document.querySelector("#infoarea");
-		infoArea.innerHTML = '';
+		infoArea.innerText = '';
 		infoArea.appendChild(generateTagTable(poi.poiTags));
 		fetchPoiRatings().then(updatePoiRatings);
 		updateRatingSubmitDiv();
@@ -347,13 +347,13 @@ function updateOwnRatings() {
 		}
 		table.appendChild(row);
 	}
-	ownRatingsArea.innerHTML = "";
+	ownRatingsArea.innerText = "";
 	if(currentUser == null) {
-		ownRatingsArea.innerHTML = "Du bist nicht eingeloggt!";
+		ownRatingsArea.innerText = "Du bist nicht eingeloggt!";
 		return;
 	}
 	if(empty) {
-		ownRatingsArea.innerHTML = "Du hast noch nichts bewertet!";
+		ownRatingsArea.innerText = "Du hast noch nichts bewertet!";
 	} else {
 		ownRatingsArea.appendChild(table);
 	}
@@ -361,7 +361,7 @@ function updateOwnRatings() {
 
 function updatePoiRatings() {
 	let bewertungsDiv = document.querySelector("#bewertungsDiv");
-	bewertungsDiv.innerHTML = "";
+	bewertungsDiv.innerText = "";
 	let empty = true;
 	for(rating of poiRatings) {
 		empty = false;
@@ -385,7 +385,7 @@ function updatePoiRatings() {
 		bewertungsDiv.appendChild(br);
 	}
 	if(empty) {
-		bewertungsDiv.innerHTML = "Noch keine Bewertungen!"
+		bewertungsDiv.innerText = "Noch keine Bewertungen!"
 	}
 }
 
@@ -395,19 +395,21 @@ function updatePubHeadline() {
 	let linkAtt = document.createAttribute("href");
 	linkAtt.value = "javascript:switchInfoArea()";
 	infolink.setAttributeNode(linkAtt);
-	document.querySelector("#pubheadline").innerHTML = getName(currentPoi) + " (" + infolink.outerHTML + ")";
+	let pubheadline = document.querySelector("#pubheadline");
+	pubheadline.innerText = getName(currentPoi);
+	pubheadline.innerHTML += " (" + infolink.outerHTML + ")"
 }
 
 function updateHeader() {
 	if(currentUser != null) {
 		document.querySelector("#loginAndRegister").style.display = "none";
 		document.querySelector("#currentUserInfo").style.display = "block";
-		document.querySelector("#currentUserInfoHello").innerHTML = "Hallo " + currentUser.username + "!";
-		document.querySelector("#loginErrorArea").innerHTML = "";
+		document.querySelector("#currentUserInfoHello").innerText = "Hallo " + currentUser.username + "!";
+		document.querySelector("#loginErrorArea").innerText = "";
 	} else {
 		document.querySelector("#loginAndRegister").style.display = "block";
 		document.querySelector("#currentUserInfo").style.display = "none";
-		document.querySelector("#logoutErrorArea").innerHTML = "";
+		document.querySelector("#logoutErrorArea").innerText = "";
 	}
 }
 
