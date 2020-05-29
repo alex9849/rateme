@@ -211,8 +211,7 @@ function submitRating(e) {
 		osmId: currentPoi.osmId,
 		ratingType: 'image'
 	};
-	reader.onload = function(fileData) {
-		data.image = fileData.target.result;
+	let sendData = function() {
 		let config = {
 			method: 'PUT',
 			body: JSON.stringify(data),
@@ -232,8 +231,18 @@ function submitRating(e) {
 				fetchOwnRatings()
 					.then(updateOwnRatings);
 			});
-	};
-	reader.readAsDataURL(sendFile);
+	}
+
+	if(sendFile !== null) {
+		reader.onload = function(fileData) {
+			data.image = fileData.target.result;
+			sendData();
+		};
+		reader.readAsDataURL(sendFile);
+	} else {
+		sendData();
+	}
+
 	document.querySelector("#submitRatingErrorArea");
 }
 
@@ -320,7 +329,7 @@ function updateOwnRatings() {
 		let col4 = document.createElement("TD");
 		col4.appendChild(generateStars(rating.grade));
 		let col5 = document.createElement("TD");
-		if(rating.image !== null) {
+		if(!!rating.image) {
 			let image = document.createElement("img");
 			image.setAttribute("src", rating.image);
 			col5.appendChild(image);
@@ -362,15 +371,17 @@ function updatePoiRatings() {
 		let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
 		divText.innerText = rating.username + " schreibt am " + createDate.toLocaleDateString("de-DE") + ":";
 		bewertungsDiv.appendChild(divText);
+		bewertungsDiv.appendChild(document.createElement("br"));
 		let text = document.createElement("div");
 		text.innerText = rating.text;
 		bewertungsDiv.appendChild(text);
-		if(rating.image !== null) {
+		if(!!rating.image) {
+			bewertungsDiv.appendChild(document.createElement("br"));
 			let image = document.createElement("img");
 			image.setAttribute("src", rating.image);
 			bewertungsDiv.appendChild(image);
 		}
-		let br = document.createElement("br");
+		let br = document.createElement("hr");
 		bewertungsDiv.appendChild(br);
 	}
 	if(empty) {

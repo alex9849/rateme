@@ -97,6 +97,10 @@ footer {
     padding: 10px;
 }
 
+#ownRatingsArea table tr td {
+    padding: 10px;
+}
+
 
 #registration {
 	position: absolute;
