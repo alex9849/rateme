@@ -76,8 +76,7 @@ public class RatingEndpoint {
             double hight = 60;
             double witdh = img.getWidth() / (img.getHeight() / hight);
             img = ImageUtils.resizeImage(img, (int) witdh, (int) hight);
-            File out = new File("image.png");
-            ImageIO.write(img, "png", out);
+            rating.setImage(ImageUtils.toBase64Image(img));
         }
         ratingService.createRating(rating);
         return Response.ok().build();

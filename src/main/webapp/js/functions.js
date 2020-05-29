@@ -300,6 +300,9 @@ function updateOwnRatings() {
 		let col4 = document.createElement("TD");
 		col4.appendChild(generateStars(rating.grade));
 		let col5 = document.createElement("TD");
+		let image = document.createElement("img");
+		image.setAttribute("src", rating.image);
+		col5.appendChild(image);
 
 		row.appendChild(col1);
 		row.appendChild(col2);
@@ -347,6 +350,9 @@ function updatePoiRatings(poi) {
 				let text = document.createElement("div");
 				text.innerText = rating.text;
 				bewertungsDiv.appendChild(text);
+				let image = document.createElement("img");
+				image.setAttribute("src", rating.image);
+				bewertungsDiv.appendChild(image);
 				let br = document.createElement("br");
 				bewertungsDiv.appendChild(br);
 			}

@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
@@ -22,5 +23,11 @@ public class ImageUtils {
         graphics.drawImage(image, 0, 0, width, width, null);
         graphics.dispose();
         return resized;
+    }
+
+    public static String toBase64Image(BufferedImage image) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", out);
+        return Base64.getEncoder().encodeToString(out.toByteArray());
     }
 }
