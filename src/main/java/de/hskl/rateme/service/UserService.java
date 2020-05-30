@@ -19,7 +19,7 @@ public class UserService {
 
     public User createUser(User user) {
         if(userDB.loadUser(user.getUsername()) != null) {
-            throw new RatemeDbException("A user with this username already exists!");
+            throw new IllegalArgumentException("A user with this username already exists!");
         }
         user.setPassword(Password.getSaltedHash(user.getPassword()));
         userDB.createUser(user);
@@ -30,13 +30,13 @@ public class UserService {
         return userDB.loadUser(id);
     }
 
-    public UUID loginUser(LoginData loginData) {
+    public UUID loginUser(LoginData loginData) throws IllegalAccessException {
         User user = userDB.loadUser(loginData.getUsername());
         if(user == null) {
-            throw new RatemeDbException("User does not exist!");
+            throw new IllegalAccessException("User does not exist!");
         }
         if(!Password.checkPassword(loginData.getPassword(), user.getPassword())) {
-            throw new RatemeDbException("Password invalid!");
+            throw new IllegalAccessException("Password invalid!");
         }
         return accessService.login(user.getId());
     }

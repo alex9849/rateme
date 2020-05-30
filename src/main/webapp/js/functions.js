@@ -51,6 +51,7 @@ function setupButtons() {
 	document.querySelector("#showRegisterLink").addEventListener("click", e => switchRegistration());
 	document.querySelector("#registerAbort").addEventListener("click", e => hideRegistration());
 	document.querySelector("#logoutButton").addEventListener("click", e => logoutUser());
+	document.querySelector("#infoareaButton").addEventListener("click", e => hideInfoArea());
 	document.querySelector("#registerPassword").addEventListener("keyup", e => updatePasswordCanvas(e.target.value));
 	document.querySelector("#registrationForm").addEventListener("submit", e => {e.preventDefault(); submitRegister(e);});
 	document.querySelector("#submitRatingForm").addEventListener("submit", e => {e.preventDefault(); submitRating(e);});
@@ -125,16 +126,17 @@ function loginUser(username, password, displayError) {
 		headers: { 'Content-type': 'application/json' },
 		body: JSON.stringify(data)
 	};
+	let errorArea = document.querySelector("#loginErrorArea");
 	fetch("rateme/user", cfg)
 		.then(response => {
-			if(response.status !== 200) {
-				if(displayError) {
-					document.querySelector("#loginErrorArea").innerText = "Login failed!";
-				}
+			if(response.status !== 200 && displayError) {
+				response.json().then(json => errorArea.innerText = json.message);
 				return;
 			}
+			errorArea.innerText = "";
 			return response.json();
-		}).then(json => {
+		})
+		.then(json => {
 		currentUser = json;
 		updateRatingSubmitDiv();
 		updateHeader();
@@ -148,12 +150,14 @@ function logoutUser() {
 		method: 'DELETE',
 		headers: { 'Content-type': 'application/json' }
 	};
+	let errorArea = document.querySelector("#logoutErrorArea");
 	fetch("rateme/user", cfg)
 		.then(response => {
 			if(response.status !== 200) {
-				document.querySelector("#logoutErrorArea").innerText = "Logout failed!";
+				response.json().then(json => errorArea.innerText = json.message);
 				return;
 			}
+			errorArea.innerText = "";
 			currentUser = null;
 			updateRatingSubmitDiv();
 			updateHeader();
@@ -180,14 +184,14 @@ function submitRegister(e) {
 		headers: { 'Content-type': 'application/json' },
 		body: JSON.stringify(data)
 	};
+	let errorArea = document.querySelector("#registrationErrorArea");
 	fetch("rateme/user", cfg)
 		.then(response => {
 			if(!response.ok) {
-				response.json().then(json => document.querySelector("#registrationErrorArea").innerText = json.message);
+				response.json().then(json => errorArea.innerText = json.message);
 				return;
-			} else {
-				document.querySelector("#registrationErrorArea").innerText = "";
 			}
+			errorArea.innerText = "";
 			loginUser(username, password, false);
 			hideRegistration();
 		});
@@ -231,7 +235,7 @@ function submitRating(e) {
 				fetchOwnRatings()
 					.then(updateOwnRatings);
 			});
-	}
+	};
 
 	if(sendFile !== null) {
 		reader.onload = function(fileData) {
@@ -452,6 +456,10 @@ function updatePasswordCanvas(registerPassword) {
 	ctx.fillStyle = grd;
 	ctx.fillRect(0, 0, 265, 10);
 }
+
+/* ###########################
+######## Area Switches #######
+########################### */
 
 function switchInfoArea() {
 	if(document.querySelector("#infoareawbutton").style.display === "block") {

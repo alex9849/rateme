@@ -16,11 +16,11 @@ public class User {
     private String email;
 
     @Validator.Required
-    @Validator.Regex(regex = "^[A-Z]([^0-9\\§\\%\\&\\!\\?])+?[a-z]$", errorMessage = "Vorname muss mit einem Großbuchstaben anfange und mit einem Kleinbuchstaben enden")
+    @Validator.Regex(regex = "^[A-Z]([^0-9\\§\\%\\&\\!\\?])+?[a-z]$", errorMessage = "Vorname muss mit einem Großbuchstaben anfangen und mit einem Kleinbuchstaben enden! Die Zeichen '§', '%', '&', '!' und '?' sind nicht erlaubt!")
     private String firstname;
 
     @Validator.Required
-    @Validator.Regex(regex = "^[A-Z]([^0-9\\§\\%\\&\\!\\?])+?[a-z]$", errorMessage = "Nachname muss mit einem Großbuchstaben anfange und mit einem Kleinbuchstaben enden")
+    @Validator.Regex(regex = "^[A-Z]([^0-9\\§\\%\\&\\!\\?])+?[a-z]$", errorMessage = "Nachname muss mit einem Großbuchstaben anfangen und mit einem Kleinbuchstaben enden! Die Zeichen '§', '%', '&', '!' und '?' sind nicht erlaubt!")
     private String lastname;
 
     @Validator.Required

@@ -23,6 +23,7 @@ import java.util.UUID;
 @Path("/user")
 @RegisterProvider(ValidatorExceptionMapper.class)
 @RegisterProvider(RatemeDbExceptionMapper.class)
+@RegisterProvider(IllegalAccessException.class)
 @Singleton
 public class UserEndpoint {
     @Inject
@@ -46,7 +47,8 @@ public class UserEndpoint {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response loginUser(@RequestBody(required = true) LoginData loginData) {
+    public Response loginUser(@RequestBody(required = true) LoginData loginData) throws IllegalAccessException {
+        System.out.println("loginUser");
         Validator.validate(loginData);
         UUID loginId = userService.loginUser(loginData);
         int userId = accessService.getUserId(loginId);
@@ -59,6 +61,7 @@ public class UserEndpoint {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response logoutUser(@CookieParam("LoginID") String loginId) {
+        System.out.println("logoutUser");
         userService.logout(UUID.fromString(loginId));
         return Response.ok().cookie((NewCookie) null).build();
     }

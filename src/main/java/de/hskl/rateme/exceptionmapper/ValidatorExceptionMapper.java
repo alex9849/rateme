@@ -11,6 +11,7 @@ import java.util.Date;
 public class ValidatorExceptionMapper implements ExceptionMapper<ValidationException> {
     @Override
     public Response toResponse(ValidationException e) {
+        System.out.println("ValidationException! Returning code 422. Message: " + e.getMessage());
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(422);
         response.setTimestamp(new Date());

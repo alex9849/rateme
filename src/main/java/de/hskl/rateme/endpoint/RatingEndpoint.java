@@ -17,16 +17,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Base64;
 import java.util.UUID;
 
 @Path("/rating")
 @RegisterProvider(ValidatorExceptionMapper.class)
 @RegisterProvider(RatemeDbExceptionMapper.class)
+@RegisterProvider(IllegalAccessException.class)
 @Singleton
 public class RatingEndpoint {
     @Inject
@@ -38,35 +35,31 @@ public class RatingEndpoint {
     @Path("/poi/{poiid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRatingsByPoi(@PathParam("poiid") long poiId) {
+        System.out.println("getRatingsByPoi");
         return Response.ok().entity(ratingService.getRatingsByPoi(poiId)).build();
     }
 
     @GET
     @Path("/own")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString) {
-        if(loginIdString == null) {
-            return Response.status(401).build();
+    public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString) throws IllegalAccessException {
+        System.out.println("getRatingsByUser");
+        if(!accessService.isLoggedIn(loginIdString)) {
+            throw new IllegalAccessException("Not logged in!");
         }
-        UUID loginId = UUID.fromString(loginIdString);
-        if(!accessService.isLoggedIn(loginId)) {
-            return Response.status(401).build();
-        }
-        return Response.ok().entity(ratingService.getRatingsByUser(accessService.getUserId(loginId))).build();
+        int userId = accessService.getUserId(UUID.fromString(loginIdString));
+        return Response.ok().entity(ratingService.getRatingsByUser(userId)).build();
     }
 
     @PUT
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response rate(@CookieParam("LoginID") String loginIdString, @RequestBody Rating rating) throws IOException {
-        if(loginIdString == null) {
-            return Response.status(401).build();
+    public Response rate(@CookieParam("LoginID") String loginIdString, @RequestBody Rating rating) throws IOException, IllegalAccessException {
+        System.out.println("createRate");
+        if(!accessService.isLoggedIn(loginIdString)) {
+            throw new IllegalAccessException("Not logged in!");
         }
-        UUID loginId = UUID.fromString(loginIdString);
-        if(!accessService.isLoggedIn(loginId)) {
-            return Response.status(401).build();
-        }
-        int userId = accessService.getUserId(loginId);
+        int userId = accessService.getUserId(UUID.fromString(loginIdString));
         rating.setCreateDt(null);
         rating.setModifyDt(null);
         rating.setUserId(userId);

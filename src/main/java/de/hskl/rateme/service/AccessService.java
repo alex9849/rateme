@@ -9,6 +9,14 @@ import java.util.UUID;
 public class AccessService {
     private Map<UUID, Integer> logins = new HashMap<>();
 
+    public boolean isLoggedIn(String uuidString) {
+        if(uuidString == null) {
+            return false;
+        }
+        UUID uuid = UUID.fromString(uuidString);
+        return isLoggedIn(uuid);
+    }
+
     public boolean isLoggedIn(UUID loginId) {
         return this.logins.containsKey(loginId);
     }
