@@ -69,6 +69,29 @@ function showPoisOnMap() {
 		});
 }
 
+function poiSelectionCallback(poi) {
+	return function (event) {
+		if(selectedMarker != null) {
+			selectedMarker.setIcon(blueIcon);
+		}
+		selectedMarker = event.target;
+		selectedMarker.setIcon(redIcon);
+		currentPoi = poi;
+
+		updatePubHeadline();
+		hideInfoArea();
+		let infoArea = document.querySelector("#infoarea");
+		infoArea.innerText = '';
+		infoArea.appendChild(generateTagTable(poi.poiTags));
+		fetchPoiRatings().then(updatePoiRatings);
+		updateRatingSubmitDiv();
+	}
+}
+
+/* ##########################
+######### Fetchers ##########
+########################## */
+
 function fetchPois() {
 	return new Promise((resolve, reject) => {
 		fetch("rateme/poi")
@@ -91,12 +114,20 @@ function fetchOwnRatings() {
 			headers: { 'Content-type': 'application/json' }
 		};
 		fetch("/rateme/rating/own")
-			.then(response => response.json())
+			.then(response => {
+				if(!response.ok) {
+					if(response.status === 401 && currentUser !== null) {
+						logoutUser();
+					}
+					reject();
+					return;
+				}
+				return response.json();
+			})
 			.then(json => {
 				ownRatings = json;
 				resolve(json);
-			})
-			.catch(reject);
+			});
 	});
 }
 
@@ -115,6 +146,10 @@ function fetchPoiRatings() {
 			.catch(reject);
 	}))
 }
+
+/* ###########################
+######## Procedures ##########
+########################### */
 
 function loginUser(username, password, displayError) {
 	let data = {
@@ -223,13 +258,19 @@ function submitRating(e) {
 				'Content-type': 'application/json'
 			}
 		};
+		let errorArea = document.querySelector("#submitRatingErrorArea");
 		fetch("rateme/rating/", config)
 			.then(response => {
 				if(!response.ok) {
-					response.json().then(json => document.querySelector("#submitRatingErrorArea").innerText = json.message);
+					if(response.status === 401 && currentUser !== null) {
+						errorArea.innerText = "";
+						logoutUser();
+					} else {
+						response.json().then(json => errorArea.innerText = json.message);
+					}
 					return;
 				}
-				document.querySelector("#submitRatingErrorArea").innerText = "";
+				errorArea.innerText = "";
 				fetchPoiRatings()
 					.then(updatePoiRatings);
 				fetchOwnRatings()
@@ -245,27 +286,6 @@ function submitRating(e) {
 		reader.readAsDataURL(sendFile);
 	} else {
 		sendData();
-	}
-
-	document.querySelector("#submitRatingErrorArea");
-}
-
-function poiSelectionCallback(poi) {
-	return function (event) {
-		if(selectedMarker != null) {
-			selectedMarker.setIcon(blueIcon);
-		}
-		selectedMarker = event.target;
-		selectedMarker.setIcon(redIcon);
-		currentPoi = poi;
-
-		updatePubHeadline();
-		hideInfoArea();
-		let infoArea = document.querySelector("#infoarea");
-		infoArea.innerText = '';
-		infoArea.appendChild(generateTagTable(poi.poiTags));
-		fetchPoiRatings().then(updatePoiRatings);
-		updateRatingSubmitDiv();
 	}
 }
 
@@ -331,6 +351,7 @@ function updateOwnRatings() {
 		let col3 = document.createElement("TD");
 		col3.innerText = rating.text;
 		let col4 = document.createElement("TD");
+		col4.style.minWidth = "max-content";
 		col4.appendChild(generateStars(rating.grade));
 		let col5 = document.createElement("TD");
 		if(!!rating.image) {
