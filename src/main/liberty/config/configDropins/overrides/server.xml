@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="${project.name}">
+    <dataSource id="DefaultDataSource" jndiName="jdbc/mySQL">
+        <jdbcDriver libraryRef="MySQLLib" />
+        <properties databaseName="${env.DB_NAME}" serverName="${env.DB_HOST}"
+                    portNumber="${env.DB_PORT}" user="${env.DB_USER}" password="${env.DB_PW}" />
+    </dataSource>
+</server>
