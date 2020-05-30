@@ -41,9 +41,9 @@ services:
 #      - 443:443
 #    volumes:
 #      - /var/run/docker.sock:/tmp/docker.sock:ro
-#      - ./data/certs:/etc/nginx/certs
-#      - ./data/vhost.d:/etc/nginx/vhost.d
-#      - ./data/html:/usr/share/nginx/html
+#      - ./proxyData/certs:/etc/nginx/certs
+#      - ./proxyData/vhost.d:/etc/nginx/vhost.d
+#      - ./proxyData/html:/usr/share/nginx/html
 #    nginx-proxy-companion:
 #      image: jrcs/letsencrypt-nginx-proxy-companion
 #      restart: always
