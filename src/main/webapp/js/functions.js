@@ -256,8 +256,7 @@ function submitRating(e) {
     let data = {
         text: e.target.elements.ratingText.value,
         grade: grade,
-        osmId: currentPoi.osmId,
-        ratingType: 'image'
+        osmId: currentPoi.osmId
     };
     let sendData = function () {
         let config = {

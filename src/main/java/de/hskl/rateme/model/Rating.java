@@ -10,8 +10,6 @@ public class Rating {
     private int userId;
     private long osmId;
     @Validator.Required
-    @Validator.Regex(regex = "(image|grade)", errorMessage = "%fieldname% needs to be image or grade")
-    private String ratingType;
     @Validator.Regex(regex = "[1-5]", errorMessage = "Bewertung benötigt!")
     private int grade;
     @Validator.Required
@@ -44,14 +42,6 @@ public class Rating {
 
     public void setOsmId(long osmId) {
         this.osmId = osmId;
-    }
-
-    public String getRatingType() {
-        return ratingType;
-    }
-
-    public void setRatingType(String ratingType) {
-        this.ratingType = ratingType;
     }
 
     public int getGrade() {
