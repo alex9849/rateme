@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<server description="${project.name}">
+<server description="rateme">
 
     <featureManager>
         <feature>microProfile-3.3</feature>
@@ -13,7 +13,7 @@
                   httpPort="9080"
                   httpsPort="9443"/>
 
-    <webApplication location="${project.name}.war" contextRoot="/">
+    <webApplication location="rateme.war" contextRoot="/">
         <classloader apiTypeVisibility="+third-party" />
     </webApplication>
     <mpMetrics authentication="false"/>
