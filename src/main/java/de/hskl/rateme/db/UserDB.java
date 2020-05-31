@@ -4,8 +4,6 @@ import de.hskl.rateme.model.RatemeDbException;
 import de.hskl.rateme.model.User;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class UserDB {
 

@@ -1,6 +1,5 @@
 package de.hskl.rateme.endpoint;
 
-import de.hskl.rateme.db.PoiTagDB;
 import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.PoiTag;
