@@ -10,6 +10,7 @@ public class IllegalAccessExceptionMapper implements ExceptionMapper<IllegalAcce
     @Override
     public Response toResponse(IllegalAccessException e) {
         System.out.println("IllegalAccessException! Returning code 401. Message: " + e.getMessage());
+        e.printStackTrace();
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(401);
         response.setTimestamp(new Date());

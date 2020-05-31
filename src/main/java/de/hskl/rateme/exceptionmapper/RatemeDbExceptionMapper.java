@@ -12,6 +12,7 @@ public class RatemeDbExceptionMapper implements ExceptionMapper<RatemeDbExceptio
     @Override
     public Response toResponse(RatemeDbException e) {
         System.out.println("RatemeDbException! Returning code 500. Message: " + e.getMessage());
+        e.printStackTrace();
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(500);
         response.setTimestamp(new Date());

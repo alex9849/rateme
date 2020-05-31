@@ -12,6 +12,7 @@ public class ValidatorExceptionMapper implements ExceptionMapper<ValidationExcep
     @Override
     public Response toResponse(ValidationException e) {
         System.out.println("ValidationException! Returning code 422. Message: " + e.getMessage());
+        e.printStackTrace();
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(422);
         response.setTimestamp(new Date());
