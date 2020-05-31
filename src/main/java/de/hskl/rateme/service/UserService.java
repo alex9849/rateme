@@ -19,7 +19,7 @@ public class UserService {
 
     public User createUser(User user) {
         if(userDB.loadUser(user.getUsername()) != null) {
-            throw new IllegalArgumentException("A user with this username already exists!");
+            throw new RatemeDbException("A user with this username already exists!");
         }
         user.setPassword(Password.getSaltedHash(user.getPassword()));
         userDB.createUser(user);
