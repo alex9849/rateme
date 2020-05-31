@@ -17,9 +17,9 @@ public class RatingDB {
                     Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, rating.getUserId());
             pstmt.setLong(2, rating.getOsmId());
-            pstmt.setInt(4, rating.getGrade());
-            pstmt.setString(5, rating.getText());
-            pstmt.setString(6, rating.getImage());
+            pstmt.setInt(3, rating.getGrade());
+            pstmt.setString(4, rating.getText());
+            pstmt.setString(5, rating.getImage());
             pstmt.execute();
             ResultSet genKeys = pstmt.getGeneratedKeys();
             while (genKeys.next()) {

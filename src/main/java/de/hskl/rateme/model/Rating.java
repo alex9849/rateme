@@ -10,12 +10,12 @@ public class Rating {
     private int userId;
     private long osmId;
     @Validator.Required
-    @Validator.Regex(regex = "[1-5]", errorMessage = "Bewertung benötigt!")
+    @Validator.Regex(regex = "^[1-5]$", errorMessage = "Bewertung benötigt!")
     private int grade;
     @Validator.Required
     @Validator.Regex(regex = "^.+$", errorMessage = "Kommentar benötigt!")
     private String text;
-    @Validator.Regex(regex = "data:image\\/png;base64,(.)+", errorMessage = "%fieldname% needs to be a png file!")
+    @Validator.Regex(regex = "^data:image\\/(png|jpeg);base64,(.)+$", errorMessage = "%fieldname% needs to be a png or jpg file!")
     private String image;
     private Date createDt;
     private Date modifyDt;
