@@ -25,6 +25,9 @@ services:
       DB_PORT: 3306
       DB_USER: root
       DB_PW: ''
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
+      KAFKA_TOPIC: rating
       VIRTUAL_HOST: rateme.liggesmeyer.net
       VIRTUAL_PORT: 80
       LETSENCRYPT_HOST: rateme.liggesmeyer.net
