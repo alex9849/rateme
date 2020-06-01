@@ -4,7 +4,7 @@
         <properties databaseName="${env.DB_NAME}" serverName="${env.DB_HOST}"
                     portNumber="${env.DB_PORT}" user="${env.DB_USER}" password="${env.DB_PW}" />
     </dataSource>
-    <jndiEntry jndiName="kafkaHost" value="${env.KAFKA_HOST}" />
-    <jndiEntry jndiName="kafkaPort" value="${env.KAFKA_PORT}" />
-    <jndiEntry jndiName="kafkaTopic" value="${env.KAFKA_TOPIC}" />
+    <jndiEntry id="kafkaHost" jndiName="kafkaHost" value="${env.KAFKA_HOST}" />
+    <jndiEntry id="kafkaPort" jndiName="kafkaPort" value="${env.KAFKA_PORT}" />
+    <jndiEntry id="kafkaTopic" jndiName="kafkaTopic" value="${env.KAFKA_TOPIC}" />
 </server>

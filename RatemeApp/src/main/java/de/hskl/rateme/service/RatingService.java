@@ -26,7 +26,7 @@ public class RatingService {
         }
         ratingDB.createRating(rating);
         Gson gson = new Gson();
-        kafkaService.produce(gson.toJson(rating));
+        kafkaService.produce(rating.getId() + "", gson.toJson(rating));
     }
 
     public Collection<Rating> getRatingsByPoi(long osmID) {

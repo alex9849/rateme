@@ -34,7 +34,7 @@
         <file name="${server.config.dir}/mysql-connector-java-8.0.18.jar" />
     </library>
 
-    <jndiEntry jndiName="kafkaHost" value="localhost" />
-    <jndiEntry jndiName="kafkaPort" value="9092" />
-    <jndiEntry jndiName="kafkaTopic" value="rating" />
+    <jndiEntry id="kafkaHost" jndiName="kafkaHost" value="localhost" />
+    <jndiEntry id="kafkaPort" jndiName="kafkaPort" value="9092" />
+    <jndiEntry id="kafkaTopic" jndiName="kafkaTopic" value="rating" />
 </server>

@@ -28,8 +28,8 @@ public class KafkaService {
         this.producer = new KafkaProducer<>(properties);
     }
 
-    public void produce(String value) {
-        this.producer.send(new ProducerRecord<>(this.topic, value));
+    public void produce(String key, String value) {
+        this.producer.send(new ProducerRecord<>(this.topic, key, value));
     }
 
 }

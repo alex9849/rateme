@@ -28,9 +28,6 @@ services:
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
       KAFKA_TOPIC: rating
-      VIRTUAL_HOST: rateme.liggesmeyer.net
-      VIRTUAL_PORT: 80
-      LETSENCRYPT_HOST: rateme.liggesmeyer.net
     depends_on:
       - db
       - kafka
@@ -42,7 +39,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    container_name: sn-zookeeper
+    container_name: zookeeper
   kafka:
     # For connections _internal_ to the docker network, such as from other services
     # and components, use kafka:29092.
@@ -55,7 +52,7 @@ services:
       - zookeeper
     ports:
       - 9092:9092
-    container_name: sn-kafka
+    container_name: kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -63,26 +60,3 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
-
-
-#  nginx-proxy:
-#    image: jwilder/nginx-proxy
-#    restart: always
-#    ports:
-#      - 80:80
-#      - 443:443
-#    volumes:
-#      - /var/run/docker.sock:/tmp/docker.sock:ro
-#      - ./proxyData/certs:/etc/nginx/certs
-#      - ./proxyData/vhost.d:/etc/nginx/vhost.d
-#      - ./proxyData/html:/usr/share/nginx/html
-#    nginx-proxy-companion:
-#      image: jrcs/letsencrypt-nginx-proxy-companion
-#      restart: always
-#      volumes:
-#        - /var/run/docker.sock:/var/run/docker.sock:ro
-#      volumes_from:
-#        - nginx-proxy
-#      networks:
-#        - reverse_proxy_net
