@@ -41,12 +41,6 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     container_name: zookeeper
   kafka:
-    # For connections _internal_ to the docker network, such as from other services
-    # and components, use kafka:29092.
-    #
-    # See https://rmoff.net/2018/08/02/kafka-listeners-explained/ for details
-    # "`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-'"`-._,-
-    #
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
@@ -60,3 +54,14 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  kafkareader:
+    container_name: kafkaReader
+    build:
+      context: ./
+      dockerfile: dockerKafkaReader/Dockerfile
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
+      KAFKA_TOPIC: rating
+    depends_on:
+      - kafka
