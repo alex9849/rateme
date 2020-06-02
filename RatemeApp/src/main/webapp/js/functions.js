@@ -123,7 +123,7 @@ function fetchOwnRatings() {
             method: 'GET',
             headers: {'Content-type': 'application/json'}
         };
-        fetch("/rateme/rating/own")
+        fetch("/rateme/user/" + currentUser.id + "/ratings")
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 401 && currentUser !== null) {
@@ -147,7 +147,7 @@ function fetchPoiRatings() {
             method: 'GET',
             headers: {'Content-type': 'application/json'}
         };
-        fetch("/rateme/rating/poi/" + currentPoi.osmId, config)
+        fetch("/rateme/poi/" + currentPoi.osmId + "/ratings", config)
             .then(response => response.json())
             .then(json => {
                 poiRatings = json;
@@ -172,7 +172,7 @@ function loginUser(username, password, displayError) {
         body: JSON.stringify(data)
     };
     let errorArea = document.querySelector("#loginErrorArea");
-    fetch("rateme/user", cfg)
+    fetch("rateme/session", cfg)
         .then(response => {
             if (response.status !== 200 && displayError) {
                 response.json().then(json => errorArea.innerText = json.message);
@@ -195,7 +195,7 @@ function logoutUser() {
         headers: {'Content-type': 'application/json'}
     };
     let errorArea = document.querySelector("#logoutErrorArea");
-    fetch("rateme/user", cfg)
+    fetch("rateme/session", cfg)
         .then(response => {
             if (response.status !== 200) {
                 response.json().then(json => errorArea.innerText = json.message);
@@ -260,7 +260,7 @@ function submitRegister(e) {
         password: password
     };
     let cfg = {
-        method: 'PUT',
+        method: 'POST',
         headers: {'Content-type': 'application/json'},
         body: JSON.stringify(data)
     };
@@ -295,7 +295,7 @@ function submitRating(e) {
     };
     let sendData = function () {
         let config = {
-            method: 'PUT',
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'Content-type': 'application/json'

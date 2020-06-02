@@ -11,7 +11,10 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.*;
+import javax.ws.rs.CookieParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -24,31 +27,11 @@ import java.util.UUID;
 @Singleton
 public class RatingEndpoint {
     @Inject
-    AccessService accessService;
+    private AccessService accessService;
     @Inject
-    RatingService ratingService;
+    private RatingService ratingService;
 
-    @GET
-    @Path("/poi/{poiid}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatingsByPoi(@PathParam("poiid") long poiId) {
-        System.out.println("getRatingsByPoi");
-        return Response.ok().entity(ratingService.getRatingsByPoi(poiId)).build();
-    }
-
-    @GET
-    @Path("/own")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString) throws IllegalAccessException {
-        System.out.println("getRatingsByUser");
-        if(!accessService.isLoggedIn(loginIdString)) {
-            throw new IllegalAccessException("Not logged in!");
-        }
-        int userId = accessService.getUserId(UUID.fromString(loginIdString));
-        return Response.ok().entity(ratingService.getRatingsByUser(userId)).build();
-    }
-
-    @PUT
+    @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response rate(@CookieParam("LoginID") String loginIdString, @RequestBody Rating rating) throws IOException, IllegalAccessException {

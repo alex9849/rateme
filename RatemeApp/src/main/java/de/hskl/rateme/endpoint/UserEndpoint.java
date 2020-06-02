@@ -2,10 +2,10 @@ package de.hskl.rateme.endpoint;
 
 import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
-import de.hskl.rateme.model.LoginData;
 import de.hskl.rateme.model.User;
 import de.hskl.rateme.model.ValidationException;
 import de.hskl.rateme.service.AccessService;
+import de.hskl.rateme.service.RatingService;
 import de.hskl.rateme.service.UserService;
 import de.hskl.rateme.util.EscherPlzValidator;
 import de.hskl.rateme.util.Validator;
@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
@@ -27,11 +26,13 @@ import java.util.UUID;
 @Singleton
 public class UserEndpoint {
     @Inject
-    UserService userService;
+    private UserService userService;
     @Inject
-    AccessService accessService;
+    private AccessService accessService;
+    @Inject
+    private RatingService ratingService;
 
-    @PUT
+    @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(@RequestBody(required = true) User user) {
@@ -47,27 +48,18 @@ public class UserEndpoint {
         return Response.ok().entity(user.cloneForFrontend()).build();
     }
 
-    @POST
-    @Path("/")
+    @GET
+    @Path("{userId}/ratings")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response loginUser(@RequestBody(required = true) LoginData loginData) throws IllegalAccessException {
-        System.out.println("loginUser");
-        Validator.validate(loginData);
-        UUID loginId = userService.loginUser(loginData);
-        int userId = accessService.getUserId(loginId);
-        User user = userService.loadUser(userId);
-        NewCookie loginCookie = new NewCookie("LoginID", loginId.toString());
-        return Response.ok().cookie(loginCookie).entity(user.cloneForFrontend()).build();
-    }
-
-    @DELETE
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response logoutUser(@CookieParam("LoginID") String loginId) {
-        System.out.println("logoutUser");
-        if(loginId != null) {
-            userService.logout(UUID.fromString(loginId));
+    public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString, @PathParam("userId") long userId) throws IllegalAccessException {
+        System.out.println("getRatingsByUser");
+        if(!accessService.isLoggedIn(loginIdString)) {
+            throw new IllegalAccessException("Not logged in!");
         }
-        return Response.ok().cookie((NewCookie) null).build();
+        int loginUserId = accessService.getUserId(UUID.fromString(loginIdString));
+        if(loginUserId != userId) {
+            throw new IllegalAccessException("You are not allowed so fetch all ratings of another user!");
+        }
+        return Response.ok().entity(ratingService.getRatingsByUser(loginUserId)).build();
     }
 }
