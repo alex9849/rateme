@@ -21,7 +21,7 @@ public class UserService {
         if(userDB.loadUser(user.getUsername()) != null) {
             throw new RatemeDbException("A user with this username already exists!");
         }
-        user.setPassword(Password.getSaltedHash(user.getPassword()));
+        user.setPassword(Password.hashPassword(user.getPassword(), Password.genSalt()));
         userDB.createUser(user);
         return user;
     }
