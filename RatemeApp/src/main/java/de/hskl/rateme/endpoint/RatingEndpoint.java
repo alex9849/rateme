@@ -52,7 +52,6 @@ public class RatingEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRatings(@CookieParam("LoginID") String loginIdString, @QueryParam("user") Long userId, @QueryParam("poi") Long poiId) throws IllegalAccessException {
         System.out.println("getRatings");
-
         if((userId == null) == (poiId == null)) {
             throw new RatemeDbException("Getting ratings requires exactly one filter!");
         }
@@ -66,6 +65,7 @@ public class RatingEndpoint {
     }
 
     private Collection<Rating> getRatingsByUser(String loginIdString, Long userId) throws IllegalAccessException {
+        System.out.println("getRatingsByUser");
         if(!accessService.isLoggedIn(loginIdString)) {
             throw new IllegalAccessException("Not logged in!");
         }
@@ -77,6 +77,7 @@ public class RatingEndpoint {
     }
 
     private Collection<Rating> getRatingsByPoi(Long poiId) {
+        System.out.println("getRatingsByPoi");
         return ratingService.getRatingsByPoi(poiId);
     }
 }

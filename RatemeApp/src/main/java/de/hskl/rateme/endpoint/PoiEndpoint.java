@@ -5,7 +5,6 @@ import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.Poi;
 import de.hskl.rateme.model.PoiTag;
 import de.hskl.rateme.service.PoiService;
-import de.hskl.rateme.service.RatingService;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 import javax.inject.Inject;
@@ -25,8 +24,6 @@ import java.util.Collection;
 public class PoiEndpoint {
     @Inject
     private PoiService poiService;
-    @Inject
-    private RatingService ratingService;
 
     @GET
     @Path("/")
@@ -41,7 +38,7 @@ public class PoiEndpoint {
     @Path("{poiid}/tags")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPoiTags(@PathParam("poiid") long poiId) {
-        System.out.println("getAllPoiTags");
+        System.out.println("getPoiTags");
         Collection<PoiTag> allPoi = poiService.getPoiTags(poiId);
         return Response.ok().entity(allPoi).build();
     }

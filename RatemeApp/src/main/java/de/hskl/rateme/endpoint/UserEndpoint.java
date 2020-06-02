@@ -4,8 +4,6 @@ import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.User;
 import de.hskl.rateme.model.ValidationException;
-import de.hskl.rateme.service.AccessService;
-import de.hskl.rateme.service.RatingService;
 import de.hskl.rateme.service.UserService;
 import de.hskl.rateme.util.EscherPlzValidator;
 import de.hskl.rateme.util.Validator;
@@ -28,10 +26,6 @@ import javax.ws.rs.core.Response;
 public class UserEndpoint {
     @Inject
     private UserService userService;
-    @Inject
-    private AccessService accessService;
-    @Inject
-    private RatingService ratingService;
 
     @POST
     @Path("/")
