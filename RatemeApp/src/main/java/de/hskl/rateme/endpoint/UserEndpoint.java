@@ -4,6 +4,7 @@ import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.User;
 import de.hskl.rateme.model.ValidationException;
+import de.hskl.rateme.service.AccessService;
 import de.hskl.rateme.service.UserService;
 import de.hskl.rateme.util.EscherPlzValidator;
 import de.hskl.rateme.util.Validator;
@@ -12,11 +13,11 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.util.UUID;
 
 @Path("/user")
 @RegisterProvider(ValidatorExceptionMapper.class)
@@ -26,6 +27,8 @@ import javax.ws.rs.core.Response;
 public class UserEndpoint {
     @Inject
     private UserService userService;
+    @Inject
+    AccessService accessService;
 
     @POST
     @Path("/")
@@ -40,6 +43,21 @@ public class UserEndpoint {
             throw new ValidationException("PLZ passt nicht zur Stadt");
         }
         userService.createUser(user);
+        return Response.created(UriBuilder.fromResource(this.getClass())
+            .path(user.getId() + "").build()).entity(user.cloneForFrontend()).build();
+    }
+
+    @GET
+    @Path("{userid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@CookieParam("LoginID") UUID loginId, @PathParam("userid") int userId) throws IllegalAccessException {
+        System.out.println("getUser");
+        User user = accessService.getUserIfLoggedIn(loginId);
+        if(user == null)
+            throw new IllegalAccessException("Not logged in!");
+        if(user.getId() != userId)
+            throw new IllegalAccessException("You are not allowed to get other users!");
+
         return Response.ok().entity(user.cloneForFrontend()).build();
     }
 }

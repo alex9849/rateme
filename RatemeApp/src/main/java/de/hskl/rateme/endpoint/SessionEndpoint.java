@@ -35,8 +35,8 @@ public class SessionEndpoint {
     public Response loginUser(@RequestBody(required = true) LoginData loginData) throws IllegalAccessException {
         System.out.println("loginUser");
         Validator.validate(loginData);
-        UUID loginId = userService.loginUser(loginData);
-        int userId = accessService.getUserId(loginId);
+        UUID loginId = accessService.login(loginData);
+        int userId = accessService.getUserIdIfLoggedIn(loginId);
         User user = userService.loadUser(userId);
         NewCookie loginCookie = new NewCookie("LoginID", loginId.toString());
         return Response.ok().cookie(loginCookie).entity(user.cloneForFrontend()).build();
@@ -48,7 +48,7 @@ public class SessionEndpoint {
     public Response logoutUser(@CookieParam("LoginID") String loginId) {
         System.out.println("logoutUser");
         if(loginId != null) {
-            userService.logout(UUID.fromString(loginId));
+            accessService.logout(UUID.fromString(loginId));
         }
         return Response.ok().cookie((NewCookie) null).build();
     }

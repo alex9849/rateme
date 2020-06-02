@@ -1,20 +1,16 @@
 package de.hskl.rateme.service;
 
 import de.hskl.rateme.db.UserDB;
-import de.hskl.rateme.model.LoginData;
 import de.hskl.rateme.model.User;
 import de.hskl.rateme.util.Password;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.UUID;
 
 @Singleton
 public class UserService {
     @Inject
     UserDB userDB;
-    @Inject
-    AccessService accessService;
 
     public User createUser(User user) {
         user.setPassword(Password.hashPassword(user.getPassword(), Password.genSalt()));
@@ -26,19 +22,8 @@ public class UserService {
         return userDB.loadUser(id);
     }
 
-    public UUID loginUser(LoginData loginData) throws IllegalAccessException {
-        User user = userDB.loadUser(loginData.getUsername());
-        if(user == null) {
-            throw new IllegalAccessException("User does not exist!");
-        }
-        if(!Password.checkPassword(loginData.getPassword(), user.getPassword())) {
-            throw new IllegalAccessException("Password invalid!");
-        }
-        return accessService.login(user.getId());
-    }
-
-    public boolean logout(UUID loginId) {
-        return accessService.logout(loginId);
+    public User loadUser(String username) {
+        return userDB.loadUser(username);
     }
 
 }

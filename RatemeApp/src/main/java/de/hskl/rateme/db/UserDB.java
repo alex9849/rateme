@@ -29,7 +29,7 @@ public class UserDB {
             throw new RatemeDbException("Could not insert into rateme_rating");
         } catch (SQLException e) {
             e.printStackTrace();
-            if(e.getErrorCode() == 2601 || e.getErrorCode() == 2627) {
+            if(e.getErrorCode() == 1062) {
                 throw new RatemeDbException("A user with this username already exists!", e);
             }
             throw new RatemeDbException("Error create user", e);

@@ -1,5 +1,10 @@
 package de.hskl.rateme.service;
 
+import de.hskl.rateme.model.LoginData;
+import de.hskl.rateme.model.User;
+import de.hskl.rateme.util.Password;
+
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,22 +12,22 @@ import java.util.UUID;
 
 @Singleton
 public class AccessService {
+    @Inject
+    UserService userService;
+
     private Map<UUID, Integer> logins = new HashMap<>();
 
-    public boolean isLoggedIn(String uuidString) {
-        if(uuidString == null) {
-            return false;
-        }
-        UUID uuid = UUID.fromString(uuidString);
-        return isLoggedIn(uuid);
+    public Integer getUserIdIfLoggedIn(UUID uuid) {
+        if(uuid == null)
+            return null;
+        return this.logins.get(uuid);
     }
 
-    public boolean isLoggedIn(UUID loginId) {
-        return this.logins.containsKey(loginId);
-    }
-
-    public Integer getUserId(UUID loginID) {
-        return this.logins.get(loginID);
+    public User getUserIfLoggedIn(UUID loginId) {
+        Integer userId = getUserIdIfLoggedIn(loginId);
+        if(userId == null)
+            return null;
+        return userService.loadUser(userId);
     }
 
     public UUID login(int userId) {
@@ -39,6 +44,17 @@ public class AccessService {
 
     public boolean logout(UUID loginId) {
         return this.logins.remove(loginId) != null;
+    }
+
+    public UUID login(LoginData loginData) throws IllegalAccessException {
+        User user = userService.loadUser(loginData.getUsername());
+        if(user == null) {
+            throw new IllegalAccessException("User does not exist!");
+        }
+        if(!Password.checkPassword(loginData.getPassword(), user.getPassword())) {
+            throw new IllegalAccessException("Password invalid!");
+        }
+        return this.login(user.getId());
     }
 
 

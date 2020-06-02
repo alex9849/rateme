@@ -46,4 +46,8 @@ public class RatingService {
     public Collection<Rating> getRatingsByUser(int userID) {
         return ratingDB.loadRatingsForUser(userID);
     }
+
+    public Rating getRating(int ratingid) {
+        return ratingDB.loadRating(ratingid);
+    }
 }
