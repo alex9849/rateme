@@ -38,14 +38,6 @@ public class PoiEndpoint {
     }
 
     @GET
-    @Path("{poiid}/ratings")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatingsByPoi(@PathParam("poiid") long poiId) {
-        System.out.println("getRatingsByPoi");
-        return Response.ok().entity(ratingService.getRatingsByPoi(poiId)).build();
-    }
-
-    @GET
     @Path("{poiid}/tags")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPoiTags(@PathParam("poiid") long poiId) {

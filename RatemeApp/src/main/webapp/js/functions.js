@@ -123,7 +123,7 @@ function fetchOwnRatings() {
             method: 'GET',
             headers: {'Content-type': 'application/json'}
         };
-        fetch("/rateme/user/" + currentUser.id + "/ratings")
+        fetch("rateme/rating?user=" + currentUser.id)
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 401 && currentUser !== null) {
@@ -147,7 +147,7 @@ function fetchPoiRatings() {
             method: 'GET',
             headers: {'Content-type': 'application/json'}
         };
-        fetch("/rateme/poi/" + currentPoi.osmId + "/ratings", config)
+        fetch("rateme/rating?poi=" + currentPoi.osmId, config)
             .then(response => response.json())
             .then(json => {
                 poiRatings = json;

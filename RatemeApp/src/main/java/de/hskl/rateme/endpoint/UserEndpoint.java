@@ -14,10 +14,11 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.*;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.UUID;
 
 @Path("/user")
 @RegisterProvider(ValidatorExceptionMapper.class)
@@ -46,20 +47,5 @@ public class UserEndpoint {
         }
         userService.createUser(user);
         return Response.ok().entity(user.cloneForFrontend()).build();
-    }
-
-    @GET
-    @Path("{userId}/ratings")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatingsByUser(@CookieParam("LoginID") String loginIdString, @PathParam("userId") long userId) throws IllegalAccessException {
-        System.out.println("getRatingsByUser");
-        if(!accessService.isLoggedIn(loginIdString)) {
-            throw new IllegalAccessException("Not logged in!");
-        }
-        int loginUserId = accessService.getUserId(UUID.fromString(loginIdString));
-        if(loginUserId != userId) {
-            throw new IllegalAccessException("You are not allowed so fetch all ratings of another user!");
-        }
-        return Response.ok().entity(ratingService.getRatingsByUser(loginUserId)).build();
     }
 }
