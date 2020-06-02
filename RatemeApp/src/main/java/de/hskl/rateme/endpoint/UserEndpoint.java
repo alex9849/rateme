@@ -41,7 +41,7 @@ public class UserEndpoint {
         user.setCreateDt(null);
         Validator.validate(user);
         if(!EscherPlzValidator.validateCityAndPlz(user.getZip(), user.getCity())) {
-            throw new ValidationException("PlZ passt nicht zur Stadt");
+            throw new ValidationException("PLZ passt nicht zur Stadt");
         }
         userService.createUser(user);
         return Response.ok().entity(user).build();

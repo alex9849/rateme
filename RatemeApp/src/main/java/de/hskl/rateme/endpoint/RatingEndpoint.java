@@ -5,7 +5,6 @@ import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.Rating;
 import de.hskl.rateme.service.AccessService;
 import de.hskl.rateme.service.RatingService;
-import de.hskl.rateme.util.ImageUtils;
 import de.hskl.rateme.util.Validator;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
@@ -15,7 +14,6 @@ import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -63,13 +61,6 @@ public class RatingEndpoint {
         rating.setModifyDt(null);
         rating.setUserId(userId);
         Validator.validate(rating);
-        if(rating.getImage() != null) {
-            BufferedImage img = ImageUtils.readBase64Image(rating.getImage());
-            double hight = 60;
-            double witdh = img.getWidth() / (img.getHeight() / hight);
-            img = ImageUtils.resizeImage(img, (int) witdh, (int) hight);
-            rating.setImage(ImageUtils.toBase64Image(img));
-        }
         ratingService.createRating(rating);
         return Response.ok().build();
     }

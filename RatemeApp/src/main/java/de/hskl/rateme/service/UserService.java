@@ -2,7 +2,6 @@ package de.hskl.rateme.service;
 
 import de.hskl.rateme.db.UserDB;
 import de.hskl.rateme.model.LoginData;
-import de.hskl.rateme.model.RatemeDbException;
 import de.hskl.rateme.model.User;
 import de.hskl.rateme.util.Password;
 
@@ -18,9 +17,6 @@ public class UserService {
     AccessService accessService;
 
     public User createUser(User user) {
-        if(userDB.loadUser(user.getUsername()) != null) {
-            throw new RatemeDbException("A user with this username already exists!");
-        }
         user.setPassword(Password.hashPassword(user.getPassword(), Password.genSalt()));
         userDB.createUser(user);
         return user;
