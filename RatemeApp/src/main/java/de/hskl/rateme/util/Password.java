@@ -35,8 +35,7 @@ public class Password {
         String[] saltAndPassword = storedPassword.split("\\$");
         byte[] salt = Base64.getDecoder().decode(saltAndPassword[0]);
         String hashedPassword = hashPassword(password, salt);
-        String hashedStoredPassword = saltAndPassword[1];
-        return Objects.equals(hashedPassword, hashedStoredPassword);
+        return Objects.equals(hashedPassword, storedPassword);
     }
 
 }

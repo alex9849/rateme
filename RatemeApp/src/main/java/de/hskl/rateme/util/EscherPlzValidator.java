@@ -18,7 +18,7 @@ public class EscherPlzValidator {
             final String finalCity = city.toLowerCase();
             URL url = new URL("http://escher.informatik.hs-kl.de/PlzService/ort?plz=" + plz);
             URLConnection connection = url.openConnection();
-            connection.setRequestProperty("application/json", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
             Gson gson = new Gson();
             TypeToken<List<EscherResponse>> token = new TypeToken<List<EscherResponse>>(){};
             List<EscherResponse> er = gson.fromJson(new JsonReader(new InputStreamReader(connection.getInputStream())), token.getType());

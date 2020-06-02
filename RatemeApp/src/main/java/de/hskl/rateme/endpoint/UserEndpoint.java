@@ -65,7 +65,9 @@ public class UserEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response logoutUser(@CookieParam("LoginID") String loginId) {
         System.out.println("logoutUser");
-        userService.logout(UUID.fromString(loginId));
+        if(loginId != null) {
+            userService.logout(UUID.fromString(loginId));
+        }
         return Response.ok().cookie((NewCookie) null).build();
     }
 }
