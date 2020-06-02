@@ -4,7 +4,7 @@ import de.hskl.rateme.util.Validator;
 
 import java.sql.Date;
 
-public class User {
+public class User implements Cloneable {
     private int id;
 
     @Validator.Required()
@@ -140,5 +140,20 @@ public class User {
 
     public void setModifyDt(Date modifyDt) {
         this.modifyDt = modifyDt;
+    }
+
+    public User clone() throws CloneNotSupportedException {
+        return (User) super.clone();
+    }
+
+    public User cloneForFrontend() {
+        try {
+            User clone = this.clone();
+            clone.setPassword("***********");
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new RatemeDbException("Could not clone user for frontend!", e);
+        }
     }
 }

@@ -210,6 +210,42 @@ function logoutUser() {
 }
 
 function submitRegister(e) {
+    let errorArea = document.querySelector("#registrationErrorArea");
+
+    if(!/^[A-Z]([^0-9§%&!?])+?[a-z]$/.test(e.target.elements.firstname.value)) {
+        errorArea.innerText = "Vorname muss mit einem Großbuchstaben anfangen und mit einem Kleinbuchstaben enden! Die Zeichen '§', '%', '&', '!' und '?' sind nicht erlaubt!";
+        return;
+    } else if (!/^[A-Z]([^0-9§%&!?])+?[a-z]$/.test(e.target.elements.lastname.value)) {
+        errorArea.innerText = "Nachname muss mit einem Großbuchstaben anfangen und mit einem Kleinbuchstaben enden! Die Zeichen '§', '%', '&', '!' und '?' sind nicht erlaubt!";
+        return;
+    } else if (!/^.+$/.test(e.target.elements.street.value)) {
+        errorArea.innerText = "Straße benötigt!";
+        return;
+    } else if (!/^.+$/.test(e.target.elements.streetNr.value)) {
+        errorArea.innerText = "Hausnummer benötigt!";
+        return;
+    } else if (!/^[0-9]+$/.test(e.target.elements.streetNr.value)) {
+        errorArea.innerText = "HausNUMMER benötigt!";
+        return;
+    } else if (!/^[0-9]{5,5}$/.test(e.target.elements.zip.value)) {
+        errorArea.innerText = "Postleitzahl muss aus 5 Zahlen bestehen!";
+        return;
+    } else if (!/^.+$/.test(e.target.elements.city.value)) {
+        errorArea.innerText = "Stadt benötigt!";
+        return;
+    } else if (!/^[a-z]{4,4}[0-9]{4,4}@(stud\.(hs|fh)-kl\.de)$/.test(e.target.elements.email.value)) {
+        errorArea.innerText = "Hochschul-Email benötigt! (klein geschrieben)";
+        return;
+    } else if (!/^.+$/.test(e.target.elements.username.value)) {
+        errorArea.innerText = "Nutzername benötigt!";
+        return;
+    } else if (!/^.+$/.test(e.target.elements.password.value)) {
+        errorArea.innerText = "Passwort benötigt!";
+        return;
+    } else {
+        errorArea.innerText = "";
+    }
+
     let username = e.target.elements.username.value;
     let password = e.target.elements.password.value;
     let data = {
@@ -228,7 +264,6 @@ function submitRegister(e) {
         headers: {'Content-type': 'application/json'},
         body: JSON.stringify(data)
     };
-    let errorArea = document.querySelector("#registrationErrorArea");
     fetch("rateme/user", cfg)
         .then(response => {
             if (!response.ok) {

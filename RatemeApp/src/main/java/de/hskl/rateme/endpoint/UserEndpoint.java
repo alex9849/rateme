@@ -44,7 +44,7 @@ public class UserEndpoint {
             throw new ValidationException("PLZ passt nicht zur Stadt");
         }
         userService.createUser(user);
-        return Response.ok().entity(user).build();
+        return Response.ok().entity(user.cloneForFrontend()).build();
     }
 
     @POST
@@ -57,7 +57,7 @@ public class UserEndpoint {
         int userId = accessService.getUserId(loginId);
         User user = userService.loadUser(userId);
         NewCookie loginCookie = new NewCookie("LoginID", loginId.toString());
-        return Response.ok().cookie(loginCookie).entity(user).build();
+        return Response.ok().cookie(loginCookie).entity(user.cloneForFrontend()).build();
     }
 
     @DELETE
