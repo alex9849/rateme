@@ -1,6 +1,6 @@
 package de.hskl.rateme.exceptionmapper;
 
-import de.hskl.rateme.model.RatemeDbException;
+import de.hskl.rateme.model.exception.RatemeDbException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

@@ -174,7 +174,7 @@ function loginUser(username, password, displayError) {
     let errorArea = document.querySelector("#loginErrorArea");
     fetch("rateme/session", cfg)
         .then(response => {
-            if (response.status !== 200 && displayError) {
+            if (!response.ok && displayError) {
                 response.json().then(json => errorArea.innerText = json.message);
                 return;
             }
@@ -197,7 +197,7 @@ function logoutUser() {
     let errorArea = document.querySelector("#logoutErrorArea");
     fetch("rateme/session", cfg)
         .then(response => {
-            if (response.status !== 200) {
+            if (!response.ok) {
                 response.json().then(json => errorArea.innerText = json.message);
                 return;
             }

@@ -1,6 +1,6 @@
 package de.hskl.rateme.util;
 
-import de.hskl.rateme.model.ValidationException;
+import de.hskl.rateme.model.exception.ValidationException;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

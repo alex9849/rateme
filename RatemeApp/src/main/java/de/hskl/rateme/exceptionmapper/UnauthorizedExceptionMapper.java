@@ -1,14 +1,16 @@
 package de.hskl.rateme.exceptionmapper;
 
+import de.hskl.rateme.model.exception.UnauthorizedException;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Date;
 
 @Provider
-public class IllegalAccessExceptionMapper implements ExceptionMapper<IllegalAccessException> {
+public class UnauthorizedExceptionMapper implements ExceptionMapper<UnauthorizedException> {
     @Override
-    public Response toResponse(IllegalAccessException e) {
+    public Response toResponse(UnauthorizedException e) {
         System.out.println("IllegalAccessException! Returning code 401. Message: " + e.getMessage());
         e.printStackTrace();
         ExceptionResponse response = new ExceptionResponse();

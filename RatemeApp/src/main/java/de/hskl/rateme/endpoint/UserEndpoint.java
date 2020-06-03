@@ -3,7 +3,8 @@ package de.hskl.rateme.endpoint;
 import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.User;
-import de.hskl.rateme.model.ValidationException;
+import de.hskl.rateme.model.exception.UnauthorizedException;
+import de.hskl.rateme.model.exception.ValidationException;
 import de.hskl.rateme.service.AccessService;
 import de.hskl.rateme.service.UserService;
 import de.hskl.rateme.util.EscherPlzValidator;
@@ -50,13 +51,13 @@ public class UserEndpoint {
     @GET
     @Path("{userid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@CookieParam("LoginID") UUID loginId, @PathParam("userid") int userId) throws IllegalAccessException {
+    public Response getUser(@CookieParam("LoginID") UUID loginId, @PathParam("userid") int userId) throws UnauthorizedException {
         System.out.println("getUser");
         User user = accessService.getUserIfLoggedIn(loginId);
         if(user == null)
-            throw new IllegalAccessException("Not logged in!");
+            throw new UnauthorizedException("Not logged in!");
         if(user.getId() != userId)
-            throw new IllegalAccessException("You are not allowed to get other users!");
+            throw new UnauthorizedException("You are not allowed to get other users!");
 
         return Response.ok().entity(user.cloneForFrontend()).build();
     }

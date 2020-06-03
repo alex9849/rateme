@@ -2,7 +2,7 @@ package de.hskl.rateme.db;
 
 import de.hskl.rateme.model.Poi;
 import de.hskl.rateme.model.PoiTag;
-import de.hskl.rateme.model.RatemeDbException;
+import de.hskl.rateme.model.exception.RatemeDbException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

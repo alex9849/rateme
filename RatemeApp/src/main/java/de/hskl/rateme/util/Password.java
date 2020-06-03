@@ -1,6 +1,6 @@
 package de.hskl.rateme.util;
 
-import de.hskl.rateme.model.RatemeDbException;
+import de.hskl.rateme.model.exception.RatemeDbException;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;

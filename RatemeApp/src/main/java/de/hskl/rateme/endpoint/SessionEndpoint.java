@@ -4,6 +4,7 @@ import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.LoginData;
 import de.hskl.rateme.model.User;
+import de.hskl.rateme.model.exception.UnauthorizedException;
 import de.hskl.rateme.service.AccessService;
 import de.hskl.rateme.service.UserService;
 import de.hskl.rateme.util.Validator;
@@ -32,7 +33,7 @@ public class SessionEndpoint {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response loginUser(@RequestBody(required = true) LoginData loginData) throws IllegalAccessException {
+    public Response loginUser(@RequestBody(required = true) LoginData loginData) throws UnauthorizedException {
         System.out.println("loginUser");
         Validator.validate(loginData);
         UUID loginId = accessService.login(loginData);
@@ -50,6 +51,6 @@ public class SessionEndpoint {
         if(loginId != null) {
             accessService.logout(UUID.fromString(loginId));
         }
-        return Response.ok().cookie((NewCookie) null).build();
+        return Response.noContent().cookie((NewCookie) null).build();
     }
 }

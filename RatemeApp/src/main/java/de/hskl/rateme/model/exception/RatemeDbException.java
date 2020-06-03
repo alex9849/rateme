@@ -1,4 +1,4 @@
-package de.hskl.rateme.model;
+package de.hskl.rateme.model.exception;
 
 public class RatemeDbException extends RuntimeException {
     public RatemeDbException(String message, Throwable e) {

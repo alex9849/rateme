@@ -3,8 +3,8 @@ package de.hskl.rateme.service;
 import com.google.gson.Gson;
 import de.hskl.rateme.db.RatingDB;
 import de.hskl.rateme.model.Poi;
-import de.hskl.rateme.model.RatemeDbException;
 import de.hskl.rateme.model.Rating;
+import de.hskl.rateme.model.exception.RatemeDbException;
 import de.hskl.rateme.util.ImageUtils;
 
 import javax.inject.Inject;

@@ -1,5 +1,6 @@
 package de.hskl.rateme.model;
 
+import de.hskl.rateme.model.exception.RatemeDbException;
 import de.hskl.rateme.util.Validator;
 
 import java.sql.Date;

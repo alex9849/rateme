@@ -2,9 +2,10 @@ package de.hskl.rateme.endpoint;
 
 import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
-import de.hskl.rateme.model.RatemeDbException;
 import de.hskl.rateme.model.Rating;
 import de.hskl.rateme.model.User;
+import de.hskl.rateme.model.exception.RatemeDbException;
+import de.hskl.rateme.model.exception.UnauthorizedException;
 import de.hskl.rateme.service.AccessService;
 import de.hskl.rateme.service.RatingService;
 import de.hskl.rateme.util.Validator;
@@ -35,11 +36,11 @@ public class RatingEndpoint {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response rate(@CookieParam("LoginID") UUID loginId, @RequestBody Rating rating) throws IOException, IllegalAccessException {
+    public Response rate(@CookieParam("LoginID") UUID loginId, @RequestBody Rating rating) throws IOException, UnauthorizedException {
         System.out.println("createRate");
         User loggedInUser = accessService.getUserIfLoggedIn(loginId);
         if(loggedInUser == null)
-            throw new IllegalAccessException("Not logged in!");
+            throw new UnauthorizedException("Not logged in!");
         rating.setCreateDt(null);
         rating.setModifyDt(null);
         rating.setUserId(loggedInUser.getId());
@@ -60,7 +61,7 @@ public class RatingEndpoint {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatings(@CookieParam("LoginID") UUID loginId, @QueryParam("user") Long userId, @QueryParam("poi") Long poiId) throws IllegalAccessException {
+    public Response getRatings(@CookieParam("LoginID") UUID loginId, @QueryParam("user") Long userId, @QueryParam("poi") Long poiId) throws UnauthorizedException {
         System.out.println("getRatings");
         if((userId == null) == (poiId == null)) {
             throw new RatemeDbException("Getting ratings requires exactly one filter!");
@@ -74,13 +75,13 @@ public class RatingEndpoint {
         return Response.ok().entity(ratings).build();
     }
 
-    private Collection<Rating> getRatingsByUser(UUID loginId, Long userId) throws IllegalAccessException {
+    private Collection<Rating> getRatingsByUser(UUID loginId, Long userId) throws UnauthorizedException {
         System.out.println("getRatingsByUser");
         User loggedInUser = accessService.getUserIfLoggedIn(loginId);
         if(loggedInUser == null)
-            throw new IllegalAccessException("Not logged in!");
+            throw new UnauthorizedException("Not logged in!");
         if(loggedInUser.getId() != userId) {
-            throw new IllegalAccessException("You are not allowed so fetch all ratings of another user!");
+            throw new UnauthorizedException("You are not allowed so fetch all ratings of another user!");
         }
         return ratingService.getRatingsByUser(loggedInUser.getId());
     }

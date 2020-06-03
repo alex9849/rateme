@@ -1,4 +1,4 @@
-package de.hskl.rateme.model;
+package de.hskl.rateme.model.exception;
 
 public class ValidationException extends IllegalArgumentException {
 

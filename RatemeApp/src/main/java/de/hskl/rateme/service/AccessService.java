@@ -2,6 +2,7 @@ package de.hskl.rateme.service;
 
 import de.hskl.rateme.model.LoginData;
 import de.hskl.rateme.model.User;
+import de.hskl.rateme.model.exception.UnauthorizedException;
 import de.hskl.rateme.util.Password;
 
 import javax.inject.Inject;
@@ -46,13 +47,13 @@ public class AccessService {
         return this.logins.remove(loginId) != null;
     }
 
-    public UUID login(LoginData loginData) throws IllegalAccessException {
+    public UUID login(LoginData loginData) throws UnauthorizedException {
         User user = userService.loadUser(loginData.getUsername());
         if(user == null) {
-            throw new IllegalAccessException("User does not exist!");
+            throw new UnauthorizedException("User does not exist!");
         }
         if(!Password.checkPassword(loginData.getPassword(), user.getPassword())) {
-            throw new IllegalAccessException("Password invalid!");
+            throw new UnauthorizedException("Password invalid!");
         }
         return this.login(user.getId());
     }

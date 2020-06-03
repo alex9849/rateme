@@ -1,8 +1,8 @@
 package de.hskl.rateme.db;
 
 
-import de.hskl.rateme.model.RatemeDbException;
 import de.hskl.rateme.model.Rating;
+import de.hskl.rateme.model.exception.RatemeDbException;
 
 import java.sql.*;
 import java.util.ArrayList;

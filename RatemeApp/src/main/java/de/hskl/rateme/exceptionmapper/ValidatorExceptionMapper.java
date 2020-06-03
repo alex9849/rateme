@@ -1,6 +1,6 @@
 package de.hskl.rateme.exceptionmapper;
 
-import de.hskl.rateme.model.ValidationException;
+import de.hskl.rateme.model.exception.ValidationException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -11,12 +11,12 @@ import java.util.Date;
 public class ValidatorExceptionMapper implements ExceptionMapper<ValidationException> {
     @Override
     public Response toResponse(ValidationException e) {
-        System.out.println("ValidationException! Returning code 422. Message: " + e.getMessage());
+        System.out.println("ValidationException! Returning code 400. Message: " + e.getMessage());
 
         ExceptionResponse response = new ExceptionResponse();
-        response.setStatus(422);
+        response.setStatus(400);
         response.setTimestamp(new Date());
         response.setMessage(e.getMessage());
-        return Response.status(422).entity(response).build();
+        return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
     }
 }
