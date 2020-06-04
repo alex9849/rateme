@@ -91,8 +91,8 @@ public class RatingDB {
         rating.setGrade(rs.getInt("grade"));
         rating.setText(rs.getString("txt"));
         rating.setImage(rs.getString("image"));
-        rating.setCreateDt(rs.getDate("create_dt"));
-        rating.setModifyDt(rs.getDate("modify_dt"));
+        rating.setCreateDt(rs.getTimestamp("create_dt").toLocalDateTime());
+        rating.setModifyDt(rs.getTimestamp("modify_dt").toLocalDateTime());
         rating.setUsername(rs.getString("username"));
         return rating;
     }

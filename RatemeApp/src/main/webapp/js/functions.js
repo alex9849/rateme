@@ -410,9 +410,9 @@ function updateOwnRatings() {
         empty = false;
         let row = document.createElement("TR");
         let col1 = document.createElement("TD");
-        col1.innerText = getName(pois.find(poi => poi.osmId === rating.osmId))
+        col1.innerText = getName(pois.find(poi => poi.osmId === rating.osmId));
         let col2 = document.createElement("TD");
-        let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
+        let createDate = new Date(Date.parse(rating.createDt));
         col2.innerText = createDate.toLocaleDateString("de-DE");
         let col3 = document.createElement("TD");
         col3.innerText = rating.text;
@@ -459,7 +459,7 @@ function updatePoiRatings() {
         let stars = generateStars(rating.grade);
         bewertungsDiv.appendChild(stars);
         let divText = document.createElement("div");
-        let createDate = new Date(Date.parse(rating.createDt.replace('Z', '')));
+        let createDate = new Date(Date.parse(rating.createDt));
         divText.innerText = rating.username + " schreibt am " + createDate.toLocaleDateString("de-DE") + ":";
         bewertungsDiv.appendChild(divText);
         bewertungsDiv.appendChild(document.createElement("br"));

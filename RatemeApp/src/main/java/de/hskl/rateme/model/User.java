@@ -3,7 +3,7 @@ package de.hskl.rateme.model;
 import de.hskl.rateme.model.exception.RatemeDbException;
 import de.hskl.rateme.util.Validator;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class User implements Cloneable {
     private int id;
@@ -44,8 +44,8 @@ public class User implements Cloneable {
     @Validator.Regex(regex = "^.+$", errorMessage = "Passwort benötigt!")
     private String password;
 
-    private Date createDt;
-    private Date modifyDt;
+    private LocalDateTime createDt;
+    private LocalDateTime modifyDt;
 
     public int getId() {
         return id;
@@ -127,19 +127,19 @@ public class User implements Cloneable {
         this.password = password;
     }
 
-    public Date getCreateDt() {
+    public LocalDateTime getCreateDt() {
         return createDt;
     }
 
-    public void setCreateDt(Date createDt) {
+    public void setCreateDt(LocalDateTime createDt) {
         this.createDt = createDt;
     }
 
-    public Date getModifyDt() {
+    public LocalDateTime getModifyDt() {
         return modifyDt;
     }
 
-    public void setModifyDt(Date modifyDt) {
+    public void setModifyDt(LocalDateTime modifyDt) {
         this.modifyDt = modifyDt;
     }
 

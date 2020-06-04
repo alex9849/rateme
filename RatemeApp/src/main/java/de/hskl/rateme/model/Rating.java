@@ -2,7 +2,7 @@ package de.hskl.rateme.model;
 
 import de.hskl.rateme.util.Validator;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Rating {
     private int id;
@@ -17,8 +17,8 @@ public class Rating {
     private String text;
     @Validator.Regex(regex = "^data:image\\/(png|jpeg);base64,(.)+$", errorMessage = "%fieldname% needs to be a png or jpg file!")
     private String image;
-    private Date createDt;
-    private Date modifyDt;
+    private LocalDateTime createDt;
+    private LocalDateTime modifyDt;
 
     public int getId() {
         return id;
@@ -68,19 +68,19 @@ public class Rating {
         this.image = image;
     }
 
-    public Date getCreateDt() {
+    public LocalDateTime getCreateDt() {
         return createDt;
     }
 
-    public void setCreateDt(Date createDt) {
+    public void setCreateDt(LocalDateTime createDt) {
         this.createDt = createDt;
     }
 
-    public Date getModifyDt() {
+    public LocalDateTime getModifyDt() {
         return modifyDt;
     }
 
-    public void setModifyDt(Date modifyDt) {
+    public void setModifyDt(LocalDateTime modifyDt) {
         this.modifyDt = modifyDt;
     }
 

@@ -80,8 +80,8 @@ public class UserDB {
         user.setZip(rs.getString("zip"));
         user.setCity(rs.getString("city"));
         user.setPassword(rs.getString("password"));
-        user.setCreateDt(rs.getDate("create_dt"));
-        user.setModifyDt(rs.getDate("modify_dt"));
+        user.setCreateDt(rs.getTimestamp("create_dt").toLocalDateTime());
+        user.setModifyDt(rs.getTimestamp("modify_dt").toLocalDateTime());
         return user;
     }
 
