@@ -104,7 +104,14 @@ function poiSelectionCallback(poi) {
 
 function fetchPois() {
     return new Promise((resolve, reject) => {
-        fetch("rateme/poi")
+        let config = {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+        fetch("rateme/poi", config)
             .then(response => response.json())
             .then(data => {
                 pois = data;
@@ -121,9 +128,12 @@ function fetchOwnRatings() {
         }
         let config = {
             method: 'GET',
-            headers: {'Content-type': 'application/json'}
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
         };
-        fetch("rateme/rating?user=" + currentUser.id)
+        fetch("rateme/rating?user=" + currentUser.id, config)
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 401 && currentUser !== null) {
@@ -145,7 +155,10 @@ function fetchPoiRatings() {
     return new Promise(((resolve, reject) => {
         let config = {
             method: 'GET',
-            headers: {'Content-type': 'application/json'}
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
         };
         fetch("rateme/rating?poi=" + currentPoi.osmId, config)
             .then(response => response.json())
@@ -168,7 +181,10 @@ function loginUser(username, password, displayError) {
     };
     let cfg = {
         method: 'POST',
-        headers: {'Content-type': 'application/json'},
+        headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json'
+        },
         body: JSON.stringify(data)
     };
     let errorArea = document.querySelector("#loginErrorArea");
@@ -192,7 +208,10 @@ function loginUser(username, password, displayError) {
 function logoutUser() {
     let cfg = {
         method: 'DELETE',
-        headers: {'Content-type': 'application/json'}
+        headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json'
+        }
     };
     let errorArea = document.querySelector("#logoutErrorArea");
     fetch("rateme/session", cfg)
@@ -261,7 +280,10 @@ function submitRegister(e) {
     };
     let cfg = {
         method: 'POST',
-        headers: {'Content-type': 'application/json'},
+        headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json'
+        },
         body: JSON.stringify(data)
     };
     fetch("rateme/user", cfg)
@@ -298,7 +320,8 @@ function submitRating(e) {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
             }
         };
         let errorArea = document.querySelector("#submitRatingErrorArea");
