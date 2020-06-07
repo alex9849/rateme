@@ -11,8 +11,7 @@ import java.util.Date;
 public class UnauthorizedExceptionMapper implements ExceptionMapper<UnauthorizedException> {
     @Override
     public Response toResponse(UnauthorizedException e) {
-        System.out.println("IllegalAccessException! Returning code 401. Message: " + e.getMessage());
-        e.printStackTrace();
+        System.out.println("UnauthorizedException! Returning code 401. Message: " + e.getMessage());
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(401);
         response.setTimestamp(new Date());
