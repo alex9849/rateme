@@ -61,4 +61,15 @@ public class UserEndpoint {
 
         return Response.ok().entity(user.cloneForFrontend()).build();
     }
+
+    @GET
+    @Path("current")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@CookieParam("LoginID") UUID loginId) throws UnauthorizedException {
+        System.out.println("getUser");
+        User user = accessService.getUserIfLoggedIn(loginId);
+        if(user == null)
+            throw new UnauthorizedException("Not logged in!");
+        return Response.ok().entity(user.cloneForFrontend()).build();
+    }
 }

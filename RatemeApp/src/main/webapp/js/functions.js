@@ -44,7 +44,12 @@ window.onload = function () {
     });
 
     showPoisOnMap();
-    updateOwnRatings();
+    fetchCurrentUser()
+        .then(() => {
+            updateHeader();
+            fetchOwnRatings()
+                .then(updateOwnRatings);
+        });
 };
 
 function setupButtons() {
@@ -123,7 +128,8 @@ function fetchPois() {
 function fetchOwnRatings() {
     return new Promise((resolve, reject) => {
         if (currentUser === null) {
-            ownRatings = {};
+            ownRatings = [];
+            resolve();
             return;
         }
         let config = {
@@ -139,15 +145,15 @@ function fetchOwnRatings() {
                     if (response.status === 401 && currentUser !== null) {
                         logoutUser();
                     }
-                    reject();
+                    resolve();
                     return;
                 }
                 return response.json();
             })
             .then(json => {
                 ownRatings = json;
-                resolve(json);
-            });
+                resolve();
+            }).catch(err => reject(err));
     });
 }
 
@@ -164,10 +170,33 @@ function fetchPoiRatings() {
             .then(response => response.json())
             .then(json => {
                 poiRatings = json;
-                resolve(json);
+                resolve();
             })
             .catch(reject);
     }))
+}
+
+function fetchCurrentUser() {
+    return new Promise((resolve, reject) => {
+        let config = {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
+        };
+        fetch("rateme/user/current", config)
+            .then(response => {
+                if(response.ok)
+                    response.json().then(json => {
+                        currentUser = json;
+                        resolve();
+                    });
+                else
+                    resolve();
+            })
+            .catch(reject);
+    });
 }
 
 /* ###########################
