@@ -61,33 +61,20 @@ public class RatingEndpoint {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRatings(@CookieParam("LoginID") UUID loginId, @QueryParam("user") Long userId, @QueryParam("poi") Long poiId) throws UnauthorizedException {
+    public Response getRatings(@CookieParam("LoginID") UUID loginId, @QueryParam("user") Integer userId, @QueryParam("poi") Long poiId) {
         System.out.println("getRatings");
         if((userId == null) == (poiId == null)) {
             throw new RatemeDbException("Getting ratings requires exactly one filter!");
         }
         Collection<Rating> ratings = null;
-        if(userId != null)
-            ratings = getRatingsByUser(loginId, userId);
-        if(poiId != null)
-            ratings = getRatingsByPoi(poiId);
-
-        return Response.ok().entity(ratings).build();
-    }
-
-    private Collection<Rating> getRatingsByUser(UUID loginId, Long userId) throws UnauthorizedException {
-        System.out.println("getRatingsByUser");
-        User loggedInUser = accessService.getUserIfLoggedIn(loginId);
-        if(loggedInUser == null)
-            throw new UnauthorizedException("Not logged in!");
-        if(loggedInUser.getId() != userId) {
-            throw new UnauthorizedException("You are not allowed so fetch all ratings of another user!");
+        if(userId != null) {
+            System.out.println("getRatingsByUser");
+            ratings = ratingService.getRatingsByUser(userId);
         }
-        return ratingService.getRatingsByUser(loggedInUser.getId());
-    }
-
-    private Collection<Rating> getRatingsByPoi(Long poiId) {
-        System.out.println("getRatingsByPoi");
-        return ratingService.getRatingsByPoi(poiId);
+        if(poiId != null) {
+            System.out.println("getRatingsByPoi");
+            ratings = ratingService.getRatingsByPoi(poiId);
+        }
+        return Response.ok().entity(ratings).build();
     }
 }
