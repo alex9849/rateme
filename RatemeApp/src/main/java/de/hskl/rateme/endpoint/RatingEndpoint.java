@@ -1,6 +1,7 @@
 package de.hskl.rateme.endpoint;
 
 import de.hskl.rateme.exceptionmapper.RatemeDbExceptionMapper;
+import de.hskl.rateme.exceptionmapper.UnauthorizedExceptionMapper;
 import de.hskl.rateme.exceptionmapper.ValidatorExceptionMapper;
 import de.hskl.rateme.model.Rating;
 import de.hskl.rateme.model.User;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @Path("/rating")
 @RegisterProvider(ValidatorExceptionMapper.class)
 @RegisterProvider(RatemeDbExceptionMapper.class)
-@RegisterProvider(IllegalAccessException.class)
+@RegisterProvider(UnauthorizedExceptionMapper.class)
 @Singleton
 public class RatingEndpoint {
     @Inject
