@@ -12,8 +12,6 @@ services:
     environment:
     - MYSQL_DATABASE=osm01
     - MYSQL_ALLOW_EMPTY_PASSWORD=true
-    ports:
-    - 3306:3306
   app:
     container_name: ratemeApp
     build:
@@ -44,8 +42,6 @@ services:
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
-    ports:
-      - 9092:9092
     container_name: kafka
     environment:
       KAFKA_BROKER_ID: 1
