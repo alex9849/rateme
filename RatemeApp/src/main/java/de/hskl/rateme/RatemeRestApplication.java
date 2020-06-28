@@ -6,6 +6,6 @@ import javax.ws.rs.core.Application;
 /**
  *
  */
-@ApplicationPath("/rateme")
+@ApplicationPath("/api")
 public class RatemeRestApplication extends Application {
 }

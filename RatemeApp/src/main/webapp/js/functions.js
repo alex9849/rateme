@@ -116,7 +116,7 @@ function fetchPois() {
                 'Accept': 'application/json'
             }
         };
-        fetch("rateme/poi", config)
+        fetch("api/poi", config)
             .then(response => response.json())
             .then(data => {
                 pois = data;
@@ -139,7 +139,7 @@ function fetchOwnRatings() {
                 'Accept': 'application/json'
             }
         };
-        fetch("rateme/rating?user=" + currentUser.id, config)
+        fetch("api/rating?user=" + currentUser.id, config)
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 401 && currentUser !== null) {
@@ -166,7 +166,7 @@ function fetchPoiRatings() {
                 'Accept': 'application/json'
             }
         };
-        fetch("rateme/rating?poi=" + currentPoi.osmId, config)
+        fetch("api/rating?poi=" + currentPoi.osmId, config)
             .then(response => response.json())
             .then(json => {
                 poiRatings = json;
@@ -185,7 +185,7 @@ function fetchCurrentUser() {
                 'Accept': 'application/json'
             }
         };
-        fetch("rateme/user/current", config)
+        fetch("api/user/current", config)
             .then(response => {
                 if(response.ok)
                     response.json().then(json => {
@@ -217,7 +217,7 @@ function loginUser(username, password, displayError) {
         body: JSON.stringify(data)
     };
     let errorArea = document.querySelector("#loginErrorArea");
-    fetch("rateme/session", cfg)
+    fetch("api/session", cfg)
         .then(response => {
             if (!response.ok && displayError) {
                 response.json().then(json => errorArea.innerText = json.message);
@@ -243,7 +243,7 @@ function logoutUser() {
         }
     };
     let errorArea = document.querySelector("#logoutErrorArea");
-    fetch("rateme/session", cfg)
+    fetch("api/session", cfg)
         .then(response => {
             if (!response.ok) {
                 response.json().then(json => errorArea.innerText = json.message);
@@ -315,7 +315,7 @@ function submitRegister(e) {
         },
         body: JSON.stringify(data)
     };
-    fetch("rateme/user", cfg)
+    fetch("api/user", cfg)
         .then(response => {
             if (!response.ok) {
                 response.json().then(json => errorArea.innerText = json.message);
@@ -354,7 +354,7 @@ function submitRating(e) {
             }
         };
         let errorArea = document.querySelector("#submitRatingErrorArea");
-        fetch("rateme/rating/", config)
+        fetch("api/rating/", config)
             .then(response => {
                 if (!response.ok) {
                     if (response.status === 401 && currentUser !== null) {
