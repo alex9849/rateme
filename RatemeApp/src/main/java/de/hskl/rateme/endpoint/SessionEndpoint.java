@@ -42,7 +42,9 @@ public class SessionEndpoint {
         UUID loginId = accessService.login(loginData);
         int userId = accessService.getUserIdIfLoggedIn(loginId);
         User user = userService.loadUser(userId);
-        NewCookie loginCookie = new NewCookie(new Cookie("LoginID", loginId.toString()), "RateMe-Login-Cookie", NewCookie.DEFAULT_MAX_AGE, true);
+        Cookie cookie = new Cookie("LoginID", loginId.toString());
+        NewCookie loginCookie = new NewCookie(cookie, "RateMe-Login-Cookie",
+                NewCookie.DEFAULT_MAX_AGE, null, true, true);
         return Response.ok().cookie(loginCookie).entity(user.cloneForFrontend()).build();
     }
 
