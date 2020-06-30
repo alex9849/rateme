@@ -15,6 +15,7 @@ import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -31,6 +32,7 @@ public class SessionEndpoint {
     @Inject
     private AccessService accessService;
 
+
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,7 +42,7 @@ public class SessionEndpoint {
         UUID loginId = accessService.login(loginData);
         int userId = accessService.getUserIdIfLoggedIn(loginId);
         User user = userService.loadUser(userId);
-        NewCookie loginCookie = new NewCookie("LoginID", loginId.toString());
+        NewCookie loginCookie = new NewCookie(new Cookie("LoginID", loginId.toString()), "RateMe-Login-Cookie", NewCookie.DEFAULT_MAX_AGE, true);
         return Response.ok().cookie(loginCookie).entity(user.cloneForFrontend()).build();
     }
 

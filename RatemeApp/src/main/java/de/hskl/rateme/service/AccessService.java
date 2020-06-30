@@ -32,12 +32,6 @@ public class AccessService {
     }
 
     public UUID login(int userId) {
-        for(UUID uuid : this.logins.keySet()) {
-            if(this.logins.get(uuid) == userId) {
-                this.logins.remove(uuid);
-                break;
-            }
-        }
         UUID uuid = UUID.randomUUID();
         this.logins.put(uuid, userId);
         return uuid;
