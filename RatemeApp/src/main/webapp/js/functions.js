@@ -44,6 +44,7 @@ window.onload = function () {
     });
 
     showPoisOnMap();
+    //Try to log in.
     fetchCurrentUser()
         .then(() => {
             updateHeader();
@@ -187,7 +188,7 @@ function fetchCurrentUser() {
         };
         fetch("api/user/current", config)
             .then(response => {
-                if(response.ok)
+                if (response.ok)
                     response.json().then(json => {
                         currentUser = json;
                         resolve();
@@ -260,7 +261,7 @@ function logoutUser() {
 function submitRegister(e) {
     let errorArea = document.querySelector("#registrationErrorArea");
 
-    if(!/^[A-Z]([^0-9§%&!?])+?[a-z]$/.test(e.target.elements.firstname.value)) {
+    if (!/^[A-Z]([^0-9§%&!?])+?[a-z]$/.test(e.target.elements.firstname.value)) {
         errorArea.innerText = "Vorname muss mit einem Großbuchstaben anfangen und mit einem Kleinbuchstaben enden! Die Zeichen '§', '%', '&', '!' und '?' sind nicht erlaubt!";
         return;
     } else if (!/^[A-Z]([^0-9§%&!?])+?[a-z]$/.test(e.target.elements.lastname.value)) {

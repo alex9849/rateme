@@ -11,7 +11,9 @@
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"
                   httpPort="9080"
-                  httpsPort="9443"/>
+                  httpsPort="9443">
+        <samesite strict="LoginID"/>
+    </httpEndpoint>
 
     <webApplication location="rateme.war" contextRoot="/">
         <classloader apiTypeVisibility="+third-party" />
